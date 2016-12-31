@@ -1,10 +1,12 @@
 #!/bin/bash
 # for Arch: XFCE GIT BUILD/UPDATE SCRIPT
-# Requires: git yaourt
+# Requires: git yaourt bzr wget
 # Optional: screen
 ###################################################################################
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
+#
+# Updated: 15Dec2016
 
 
 ###################################################################################
@@ -80,10 +82,10 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-verve-plugin
                 xfce4-whiskermenu-plugin
                 xfce4-pulseaudio-plugin
-                xfce4-calculator-plugin"
-# not being built:
-#   xfce4-notes-plugin - can't build from git. See Arch package.
-#   xfce4-battery-plugin - xfce4-power-manager now comes with battery plugin
+                xfce4-calculator-plugin
+                xfce4-notes-plugin
+                xfce4-battery-plugin"
+# not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
 #   xfce4-equake-plugin - hosted on sourceforge - see below
 #   xfce4-modemlights-plugin - requires libxfcegui4
@@ -113,18 +115,19 @@ XFCE_APPS="     gigolo
                 xfce4-notifyd  
                 xfce4-screenshooter 
                 xfce4-volumed
+                xfce4-volumed-pulse
                 xfce4-terminal 
                 orage
                 xfce4-taskmanager
                 xfce4-dict
                 xfdashboard
-                xfmpc"
+                xfmpc
+                xfce4-mixer"
 # not being built:
 #   thunar-thumbnailers
 #   xfbib
 #   xfvnc - built manually. Needs patch to upgrade to libxfce4ui-1 (see AUR)
 #   squeeze  (prefer file-roller/engrampa)
-#   xfce4-mixer (28FEB15 - no longer being maintained)
                 
 # list of Xfce art
 XFCE_ART="xfwm4-themes"
@@ -152,7 +155,7 @@ xXFCE_APPS=""
 xXFCE_ART=""
 xXFCE_OTHER=""
 
-###################################################################################
+##################################################################################
 
 case $1 in
     init)
@@ -215,12 +218,11 @@ case $1 in
             libxml2 \
             gnu-netcat hddtemp lm_sensors\
             libunique \
-            gtkhotkey \
             gtksourceview2 gtksourceview3 \
             taglib gstreamer0.10-base gstreamer gst-libav clutter-gtk clutter-gst\
             libburn libisofs \
             libkeybinder2 \
-            vte \
+            vte3 \
             libical \
             qrencode \
             libgksu \
@@ -231,8 +233,10 @@ case $1 in
             libkeybinder3 \
             bzr \
             vala \
-            libmpd
+            libmpd \
+            gtk-doc libwnck3 upower wget gnome-doc-utils
         ) 
+        # 15Dec2016 - gtkhotkey no longer in repositories - use AUR
 
         # vala 0.16.1
         #wget http://download.gnome.org/sources/vala/0.16/vala-0.16.1.tar.xz
@@ -251,8 +255,19 @@ case $1 in
         which pacman > /dev/null 2>&1 &&
             (yaourt menulibre)
 
+        # gtkhotkey required
+        which pacman > /dev/null 2>&1 &&
+            (yaourt gtkhotkey)
+
+        # glade-gtk2
+        which pacman > /dev/null 2>&1 &&
+            (yaourt glade-gtk2)
+
         # fixes for missing m4 directories
-        mkdir squeeze/m4
+        echo $xXFCE_APPS | grep squeeze && 
+        (
+            mkdir squeeze/m4
+        )            
         # mkdir xfce4-sensors-plugin/m4  (fixed early 2015)
 
         echo "System initialized. Now run with update parameter."          
@@ -473,10 +488,9 @@ case $1 in
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib \
                             --localstatedir=/var \
-                            --enable-gtk3 \
                             --disable-static \
-                            --disable-debug \
-                            --enable-gtk-doc
+                            --enable-gtk-doc \
+                            --disable-debug
             make
             sudo make install
         )
@@ -714,8 +728,20 @@ case $1 in
             #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 gstreamer0.10 
                 # libgsf libopenraw poppler-glib
             # 02FEB16 + disable-gstreamer-thumbnailer = let ffmpegthumbnailer do
-                # videp thumbnails
+                # video thumbnails
+            # 23DEC16 - libopenraw patch: 
+                # sed -ri 's/(libopenraw(-gnome)?)-1\.0/\1-0.1/' acinclude.m4
             cd $SOURCE_DIR/tumbler
+            
+            # fix for liopenraw version bump
+            cat acinclude.m4 | grep libopenraw-gnome-0.1 || sed -ri 's/(libopenraw(-gnome)?)-1\.0/\1-0.1/' acinclude.m4
+            
+            # include webp thumbnailer
+            if [ ! -d plugins/webp-thumbnailer]; then    
+                cp ~/Dropbox/Development/Xfce/tumbler/tumbler_webp-thumbnailer.patch .
+                patch -p1 < tumbler_webp-thumbnailer.patch
+            fi
+
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
@@ -809,15 +835,23 @@ case $1 in
             echo "================================================================"
             echo xfce4-vala
             echo "================================================================"
-            ###
-            ###need to have 0.16 installed first
-            ###
-            #wget http://download.gnome.org/sources/vala/0.16/
-            #tar -xJf vala-0.16.1.tar.xz
-            #cd vala-0.16
-            #./configure --prefix='/usr' --enable-vapigen
-            #make
-            #sudo make install
+            #need to have vala 0.26 installed first for xfce4-vala to compile
+            cd $SOURCE_DIR
+            wget http://download.gnome.org/sources/vala/0.26/vala-0.26.2.tar.xz
+            tar -xJf vala-0.26.2.tar.xz
+            cd vala-0.26.2
+            ./configure --prefix=/usr
+            make
+            sudo make install
+        )
+
+        echo $xXFCE_BINDINGS | grep xfce4-vala && 
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo xfce4-vala
+            echo "================================================================"
             cd $SOURCE_DIR/xfce4-vala
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -864,7 +898,7 @@ case $1 in
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --disable-static \
-                            --disable-debug
+                            --disable-debug 
             make
             sudo make install
         )
@@ -984,7 +1018,7 @@ case $1 in
             echo xfce4-notes-plugin
             echo "================================================================"
             #sudo pacman -S libunique
-            # FEB27,2016 - can't build from git. See arch package.
+            ### 15Dec2016 - panel plugin not building
             cd $SOURCE_DIR/xfce4-notes-plugin
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1085,7 +1119,7 @@ case $1 in
         )
 
         echo $xXFCE_PLUGINS | grep xfce4-systemload-plugin && 
-            (
+        (
             echo
             echo
             echo "================================================================"
@@ -1301,12 +1335,13 @@ case $1 in
             echo xfce4-hardware-monitor-plugin
             echo "================================================================"
             # pacman -S libgnomecanvas libgnomecanvasmm libglademm autoconf-archive
+            cd $SOURCE_DIR/xfce4-hardware-monitor-plugin
             make clean
             
-            sed -i '/c++11/d' configure.ac
-            sed -i '/gnu++11/d' configure.ac
-            sed -i 's/AM_PROG_AR/AM_PROG_AR\nAX_CHECK_COMPILE_FLAG([-std=c++11], [CXXFLAGS="$CXXFLAGS -std=c++11"])/' configure.ac
-            sed -i 's/AM_PROG_AR/AM_PROG_AR\nAX_CHECK_COMPILE_FLAG([-std=gnu++11], [CXXFLAGS="$CXXFLAGS -std=gnu++11"])/' configure.ac
+            #sed -i '/c++11/d' configure.ac
+            #sed -i '/gnu++11/d' configure.ac
+            #sed -i 's/AM_PROG_AR/AM_PROG_AR\nAX_CHECK_COMPILE_FLAG([-std=c++11], [CXXFLAGS="$CXXFLAGS -std=c++11"])/' configure.ac
+            #sed -i 's/AM_PROG_AR/AM_PROG_AR\nAX_CHECK_COMPILE_FLAG([-std=gnu++11], [CXXFLAGS="$CXXFLAGS -std=gnu++11"])/' configure.ac
 
             ./autogen.sh
             ./configure  --prefix=/usr
@@ -1340,7 +1375,8 @@ case $1 in
             # pacman -S cmake menulibre(AUR)
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
-            cmake -DCMAKE_INSTALL_PREFIX=/usr      
+            #find . -iwholename '*cmake*' -not -name CMakeLists.txt -delete
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib
             make
             sudo make install
         )
@@ -1586,7 +1622,7 @@ case $1 in
                             --disable-debug \
                             --sysconfdir=/etc \
                             --disable-static \
-                            --disable-debug
+                            --disable-debug 
             make
             sudo make install
         )
@@ -1615,7 +1651,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-terminal
             echo "================================================================"
-            #sudo pacman -S vte 
+            #sudo pacman -S vte3 
             cd $SOURCE_DIR/xfce4-terminal
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1624,7 +1660,7 @@ case $1 in
                             --disable-debug  \
                             --enable-gen-doc 
             make
-            #sudo make install - on temporary hold (June 07 2016)
+            sudo make install
         )
 
         echo $xXFCE_APPS | grep xfce4-volumed && 
@@ -1635,6 +1671,22 @@ case $1 in
             echo xfce4-volumed
             echo "================================================================"
             cd $SOURCE_DIR/xfce4-volumed
+            make clean
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --disable-debug
+            make
+            sudo make install
+        )
+
+        echo $xXFCE_APPS | grep xfce4-volumed-pulse && 
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo xfce4-volumed-pulse
+            echo "================================================================"
+            cd $SOURCE_DIR/xfce4-volumed-pulse
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
@@ -1992,7 +2044,8 @@ case $1 in
             fi
             
             bzr branch lp:xfpanel-switch 
-                   
+            echo -n "xfpanel-switch " >> /tmp/external_apps                   
+
             cd $SOURCE_DIR/xfpanel-switch
 
             ./configure && make && sudo make install
@@ -2011,7 +2064,7 @@ case $1 in
         echo
         echo "================================================================"
         echo "================================================================"
-        echo "Summary of Packages Built:"
+        echo "Summary of Components Built:"
         echo "================================================================"
         echo "================================================================"
         echo ""
