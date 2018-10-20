@@ -1,0 +1,15 @@
+#!/bin/bash
+# needs to be exectuted from within the xfwm4 directory
+# need to specify percentage change
+
+if (( $1 >= 0 )) 2>/dev/null; then
+	echo -n "resizing xpms"
+	for name in `find . -maxdepth 1 -type f -name "*.xpm"`; do convert "$name" -alpha on -resize "$1"% $name; echo -n "."; done
+	echo ""	
+	echo -n "resizing pngs"
+	for name in `find . -maxdepth 1 -type f -name "*.png"`; do convert "$name" -alpha on -resize "$1"% $name; echo -n "."; done
+	echo ""
+else
+	echo "Usage $0 <SCALE_FACTOR>"
+	echo"   Where <SCALE_FACTOR> is > 0"
+fi   
