@@ -1,0 +1,50 @@
+#!/bin/bash
+
+ANS=$(yad --width 300 --entry --title "Switch Theme" --window-icon=preferences-desktop-theme    --image=preferences-desktop-theme     --button="gtk-ok:0" --button="gtk-close:1"     --text "Switch theme to:"     --entry-text "Greybird" "Adwaita-Dark")
+
+case $ANS in
+
+   "Adwaita-Dark")
+      GTK_THEME_NAME="Adwaita-dark"
+      WM_THEME_NAME="Adwaita Revisited Dark"
+      ICON_THEME_NAME="Vibrancy-Colors-Toz"
+      NOTIFICATION_THEME="Greybird-ToZ"
+      GTK3_SETTINGS_NAME="settings.ini.Adwaita-ToZ"
+      GTK3_GTKCSS_NAME="gtk.css.Adwaita-ToZ"
+      GTK2_GTKRC_NAME=".gtkrc-2.0.Adwaita-ToZ"
+      WALLPAPER_NAME="/home/toz/Dropbox/Pictures/MinTech/BlueSwipe.jpg"
+		WALLPAPER_CYCLE=false
+   ;;
+   "Greybird")
+      GTK_THEME_NAME="Greybird"
+      WM_THEME_NAME="Greybird"
+      ICON_THEME_NAME="Vibrancy-Colors-Toz"
+      NOTIFICATION_THEME="Greybird"
+      GTK3_SETTINGS_NAME="settings.ini.greybird"
+      GTK3_GTKCSS_NAME="gtk.css.GTK3greybird"
+      GTK2_GTKRC_NAME=".gtkrc-2.0.greybird"
+      WALLPAPER_NAME="$(find /home/toz/Dropbox/Pictures/Retina -type f | shuf -n 1)"  
+		WALLPAPER_CYCLE=true 
+   ;;
+
+   *)
+      exit 1
+   ;;
+   
+esac
+
+#cp ~/.config/gtk-3.0/$GTK3_SETTINGS_NAME ~/.config/gtk-3.0/settings.ini
+#cp ~/.config/gtk-3.0/$GTK3_GTKCSS_NAME ~/.config/gtk-3.0/gtk.css
+#cp ~/$GTK2_GTKRC_NAME ~/.gtkrc-2.0
+xfconf-query -c xsettings -p /Net/ThemeName -s $GTK_THEME_NAME
+xfconf-query -c xfwm4 -p /general/theme  -s $WM_THEME_NAME
+xfconf-query -c xsettings -p /Net/IconThemeName -s $ICON_THEME_NAME
+#xfconf-query -c xfce4-notifyd -p /theme -s $NOTIFICATION_THEME
+xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorLVDS-1/workspace0/last-image -s "$WALLPAPER_NAME"
+xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorLVDS-1/workspace0/backdrop-cycle-enable -s $WALLPAPER_CYCLE
+
+xfce4-panel -r
+
+exit 0
+
+   
