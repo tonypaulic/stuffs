@@ -1,0 +1,150 @@
+#!/bin/bash
+
+clear
+
+echo "     Xfce Core Component Versions"
+echo "----------------------------------------"
+
+#exo
+exoVer=$(exo-desktop-item-edit -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#garcon
+garconVerMajor=$(cat /usr/include/garcon-1/garcon/garcon-config.h | grep e\ GARCON_MAJOR | awk '{print $3}')
+garconVerMinor=$(cat /usr/include/garcon-1/garcon/garcon-config.h | grep e\ GARCON_MINOR | awk '{print $3}')
+garconVerMicro=$(cat /usr/include/garcon-1/garcon/garcon-config.h | grep e\ GARCON_MICRO | awk '{print $3}')
+garconVerGit=$(cd ~/Development/Xfce/garcon && git log --pretty=oneline | head -1 | awk '{print $1}' | cut -c1-7 | sed -e 's/git/  git/')
+
+#libxfce4ui
+libxfce4ui=$(xfce4-about -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#libxfce4util
+libxfce4utilVerMajor=$(cat /usr/include/xfce4/libxfce4util/libxfce4util-config.h | grep e\ LIBXFCE4UTIL_MAJOR | awk '{print $3}')
+libxfce4utilVerMinor=$(cat /usr/include/xfce4/libxfce4util/libxfce4util-config.h | grep e\ LIBXFCE4UTIL_MINOR | awk '{print $3}')
+libxfce4utilVerMicro=$(cat /usr/include/xfce4/libxfce4util/libxfce4util-config.h | grep e\ LIBXFCE4UTIL_MICRO | awk '{print $3}')
+libxfce4utilVerGit=$(cd ~/Development/Xfce/libxfce4util && git log --pretty=oneline | head -1 | awk '{print $1}' | cut -c1-7)
+
+#thunar
+thunarVer=$(thunar -V | head -1 | awk '{print $2}' | cut -c1-16 | sed -e 's/git/  git/')
+
+#thunar-volman
+thunarvolVer=$(thunar-volman -V | head -1 | awk '{print $2}' | sed -e 's/git/  git/')
+
+#tumbler
+tumblerVer=$(cat /usr/lib/pkgconfig/tumbler-1.pc | grep Version | awk '{print $2}')
+tumblergitVer=$(cd ~/Development/Xfce/tumbler && git log --pretty=oneline | head -1 | awk '{print $1}' | cut -c1-7)
+
+#xfce4-appfinder
+xfceappfinder=$(xfce4-appfinder -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#xfce4-dev-tools
+xfce4devtools=$(xdt-csource -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#xfce4-panel
+xfce4panel=$(xfce4-panel -V | head -1 | awk '{print $2}' | cut -c1-17 | sed -e 's/git/ git/')
+
+#xfce4-power-manager
+xfce4powermanager=$(xfce4-power-manager -V | grep Power | awk '{print $4}' | sed -e 's/git/  git/')
+
+#xfce4-session
+xfce4session=$(xfce4-session -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#xfce4-settings
+xfce4settings=$(xfsettingsd -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#xfconf
+xfconf=$(xfconf-query -V | head -1 | awk '{print $2}' | sed -e 's/git/ git/')
+
+#xfdesktop
+xfdesk=$(xfdesktop -V | grep xfdesktop | awk '{print $5}' | cut -c1-17 | sed -e 's/git/ git/')
+
+#xfwm4
+xfwm=$(xfwm4 -V | grep xfwm4 | awk '{print $5}' | cut -c1-17 | sed -e 's/git./ git-/')
+
+
+echo "xfce4-dev-tools     = $xfce4devtools"
+echo "libxfce4util        = $libxfce4utilVerMajor.$libxfce4utilVerMinor.$libxfce4utilVerMicro"" git-""$libxfce4utilVerGit"
+echo "xfconf              = $xfconf"
+echo "libxfce4ui          = $libxfce4ui"
+echo "garcon              = $garconVerMajor.$garconVerMinor.$garconVerMicro""  git-""$garconVerGit"
+echo "exo                 = $exoVer"
+echo "xfce4-panel         = $xfce4panel"
+echo "thunar              = $thunarVer"
+echo "xfce4-settings      = $xfce4settings"
+echo "xfce4-session       = $xfce4session"
+echo "xfwm4               = $xfwm"
+echo "xfdesktop           = $xfdesk"
+echo "xfce4-appfinder     = $xfceappfinder"
+echo "tumbler             = $tumblerVer""  git-""$tumblergitVer"
+echo "thunar-volman       = $thunarvolVer"
+echo "xfce4-power-manager = $xfce4powermanager"
+echo
+
+echo "          Xfce App Versions"
+echo "----------------------------------------"
+
+#gigolo
+gigoloVer=$(gigolo -V | grep gigolo | awk '{print $2}')
+mousepadVer=$(echo "<error>")
+orageVer=$(orage -V | grep orage | awk '{print $5'})
+paroleVer=$(parole -V | grep Parole | awk '{print $4'} | cut -c1-17 | sed -e 's/git./  git-/')
+ristrettoVer=$(ristretto -V | awk '{print $2'} | sed -e 's/git/  git/')
+squeezeVer=$()
+xfbibVer=$()
+xfburnVer=$(xfburn -V | head -1 | awk '{print $3}' | cut -c1-17 | sed -e 's/git/  git/')
+xfce4dictVer=$(xfce4-dict -V | head -1 | awk '{print $2}' | cut -c1-17 | sed -e 's/git/  git/')
+xfce4mixerVer=$()
+xfce4notifydVer=$(/usr/lib/xfce4/notifyd/xfce4-notifyd -V| head -1 | awk '{print $4}' | cut -c1-17 | sed -e 's/git/  git/')
+xfce4screenshooterVer=$(xfce4-screenshooter -V | awk '{print $2}' | sed -e 's/ifelse(,//g' | sed -e 's/.git/  git/')
+xfce4taskmanagerVer=$(echo "<error>")
+xfce4terminalVer=$(xfce4-terminal -V | head -1 | awk '{print $2}' | cut -c1-17)
+xfce4volumedVer=$()
+xfce4volumedpulseVer=$(xfce4-volumed-pulse -v|awk '{print $2'} | cut -c1-17 | sed -e 's/git./  git-/' | head -1)
+xfdashboardVer=$(xfdashboard -v | grep Version | awk '{print $2}' | cut -c13-28 | sed -e 's/git./  git-/')
+xfmpcVer=$(strings $(which xfmpc) | grep Xfmpc | grep 0 | awk '{print $2}')
+
+
+echo "gigolo              = $gigoloVer"
+echo "mousepad            = $mousepadVer"  
+echo "orage               = $orageVer"
+echo "parole              = $paroleVer"
+echo "ristretto           = $ristrettoVer"   
+echo "squeeze             = $squeezeVer"
+echo "xfbib               = $xfbibVer"
+echo "xfburn              = $xfburnVer"
+echo "xfce4-dict          = $xfce4dictVer"
+echo "xfce4-mixer         = $xfce4mixerver"
+echo "xfce4-notifyd       = $xfce4notifydVer"
+echo "xfce4-screenshooter = $xfce4screenshooterVer"
+echo "xfce4-taskmanager   = $xfce4taskmanagerVer"
+echo "xfce4-terminal      = $xfce4terminalVer"
+echo "xfce4-volumed       = $xfce4volumedVer"
+echo "xfce4-volumed-pulse = $xfce4volumedpulseVer"
+echo "xfdashboard         = $xfdashboardVer"
+echo "xfmpc               = $xfmpcVer"
+echo
+
+echo "     Xfce Panel Plugin Versions"
+echo "----------------------------------------"
+batteryVer=$(strings $(locate libbattery.so | grep "/usr") | grep "^[0-9]" | egrep -o "([0-9]{1,}\.)+[0-9]{1,}.*"  | head -1)
+calcVer=$(strings $(locate xfce4-calculator-plugin | grep "/usr") | grep "^[0-9]" | egrep -o "([0-9]{1,}\.)+[0-9]{1,}.*"  | head -1)
+
+
+echo "battery             = $batteryVer"
+echo "calculator          = $calcVer"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
