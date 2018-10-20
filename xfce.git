@@ -6,8 +6,9 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Updated: 30Apr2017
+# Last updated: October 15 2018
 
+export PYTHONPATH="/usr/share/glib-2.0"
 
 ###################################################################################
 # directory to hold source files 
@@ -43,11 +44,11 @@ XFCE_ARCHIVE=""
 #   libxfcegui4 - retired and archived (many plugins still depend on this)
 
 #list of Xfce bindings
-XFCE_BINDINGS=" xfce4-vala"
+XFCE_BINDINGS=" thunarx-python"
 #not being built:
+#   xfce4-vala (does not build requires garcon 0.2.0)
 #   garcon-vala
 #   pyxfce
-# thunarx-python
 #   xfc
 #   xfce4-mm
 
@@ -68,7 +69,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-embed-plugin
                 xfce4-xkb-plugin
                 xfce4-time-out-plugin
-                xfce4-kbdleds-plugin
                 xfce4-mpc-plugin
                 xfce4-fsguard-plugin
                 xfce4-datetime-plugin
@@ -83,7 +83,9 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-calculator-plugin
                 xfce4-notes-plugin
                 xfce4-battery-plugin
-                xfce4-statusnotifier-plugin"
+                xfce4-statusnotifier-plugin
+                xfce4-hardware-monitor-plugin
+                xfce4-stopwatch-plugin"
 # not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
 #   xfce4-equake-plugin - hosted on sourceforge - see below
@@ -94,17 +96,17 @@ XFCE_PLUGINS="  xfce4-weather-plugin
 #   xfce4-sample-plugin - just a sample plugin
 #   xfce4-teatime-plugin - compiles but doesn't work
 #   xfce4-wmdock-plugin - requires libxfcegui4
+#   xfce4-kbdleds-plugin - moved to archive
 # incomplete build:
 #   xfce4-indicator-plugin - ido/vala conflicts, missing header file
 #   xfce4-taskbar-plugin - Apr 2 17, builds but crashes on start
-#   xfce4-hardware-monitor-plugin - Apr 30 2017 - missing libgnomecanvasmm and configure warnings
 
 # list of thunar plugins
 THUNAR_PLUGINS="thunar-archive-plugin 
                 thunar-media-tags-plugin
-                thunar-shares-plugin"
+                thunar-shares-plugin
+                thunar-vcs-plugin"
 # not being built:
-#   thunar-vcs-plugin - doesn't seem to work
 #   thunar-actions-plugin - missing thunarx-1 (patched with thunarx-2 still not complete code base)
 
 # list of Xfce apps
@@ -121,7 +123,10 @@ XFCE_APPS="     gigolo
                 xfce4-taskmanager
                 xfce4-dict
                 xfdashboard
-                xfmpc"
+                xfmpc
+                catfish
+                xfce4-panel-profiles
+                xfce4-screensaver"
 # not being built:
 #   thunar-thumbnailers
 #   xfbib
@@ -138,13 +143,12 @@ XFCE_ART="xfwm4-themes"
 
 # Other Xfce packages not hosted on git.xfce.org
 SYSINFO_ENABLED="yes"
-WINDOWCK_ENABLED="yes"
-GTK_THEME_CONFIG_ENABLED="yes"
+WINDOWCK_ENABLED="no" #no longer works as of late 2017
+GTK_THEME_CONFIG_ENABLED="no"
 XFCE_THEME_MANAGER_ENABLED="no"
 XFWM_COMPOSITE_EDITOR_ENABLED="no"
 EQUAKE_PLUGIN_ENABLED="no"
 XFCE4_HOTCORNER_PLUGIN_ENABLED="no" #no longer works as of 30April2017
-XFPANEL_SWITCH_ENABLED="no"
 
 # listing of packages to build (with pending git changes)
 xXFCE_CORE=""
@@ -208,12 +212,12 @@ case $1 in
             gtk2 gtk3 hicolor-icon-theme startup-notification glade \
             libnotify perl-uri \
             desktop-file-utils libwnck libwnck3 \
-            libexif libpng gvfs \
+            libexif libpng gvfs gobject-introspection \
             libxklavier xf86-input-libinput \
             libsm xorg-iceauth \
             libepoxy \
             gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib \
-            udisks upower \
+            udisks2 upower \
             libxml2 \
             libindicator-gtk3 \
             gnu-netcat hddtemp lm_sensors libxnvctrl \
@@ -238,14 +242,14 @@ case $1 in
         ) 
         # 15Dec2016 - gtkhotkey no longer in repositories - use AUR
 
-        # vala 0.16.1
-        wget http://download.gnome.org/sources/vala/0.16/vala-0.16.1.tar.xz
-        tar -xJf vala-0.16.1.tar.xz
-        cd vala-0.16.1
-        ./configure --prefix='/usr' --enable-vapigen
-        make
-        sudo make install
-        cd ..
+        # vala 0.16.1 - don't remember why we need this version
+        #wget http://download.gnome.org/sources/vala/0.16/vala-0.16.1.tar.xz
+        #tar -xJf vala-0.16.1.tar.xz
+        #cd vala-0.16.1
+        #./configure --prefix='/usr' --enable-vapigen
+        #make
+        #sudo make install
+        #cd ..
 
         # xfwm4 extra libs (pacman yaourt)
         which pacman > /dev/null 2>&1 &&
@@ -263,18 +267,17 @@ case $1 in
         which pacman > /dev/null 2>&1 &&
             (yaourt gtkhotkey)
 
-        # glade-gtk2
-        which pacman > /dev/null 2>&1 &&
-            (yaourt glade-gtk2)
+        # glade-gtk2 - not building it any more
+        #which pacman > /dev/null 2>&1 &&
+        #    (yaourt glade-gtk2)
 
         # fixes for missing m4 directories
         echo $xXFCE_APPS | grep squeeze && 
         (
             mkdir squeeze/m4
         )            
-        # mkdir xfce4-sensors-plugin/m4  (fixed early 2015)
 
-        echo "System initialized. Now run with update parameter."          
+        echo "System initialized. Now run with update-all parameter."          
 
         ;;
 
@@ -289,7 +292,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/xfce/$package
@@ -303,7 +306,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/archive/$package
@@ -317,7 +320,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"            
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/bindings/$package
@@ -331,7 +334,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"            
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/panel-plugins/$package
@@ -345,7 +348,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"            
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/thunar-plugins/$package
@@ -359,7 +362,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"            
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/apps/$package
@@ -373,7 +376,7 @@ case $1 in
             echo "####################################################################################"
             echo "### $package"            
             git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') ]]; then
+            if [[ $(git status -uno | grep 'Your branch is up to date') ]]; then
                 echo "$package -> #####################Nothing to do"
             else
                 git pull git://git.xfce.org/art/$package
@@ -443,7 +446,6 @@ case $1 in
             #sudo pacman -S intltool gtk-doc
             cd $SOURCE_DIR/libxfce4util
             make clean
-            sudo chown -R $USER:$USER *
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib \
@@ -465,7 +467,6 @@ case $1 in
             #sudo pacman -S dbus-glib perl-extutils-depends perl-extutils-pkgconfig glib-perl 
             cd $SOURCE_DIR/xfconf
             make clean
-            sudo chown -R $USER:$USER *
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib/xfce4 \
@@ -486,7 +487,6 @@ case $1 in
             echo libxfce4ui
             echo "================================================================"
             #sudo pacman -S gtk2 gtk3 hicolor-icon-theme startup-notification glade 
-            # [AUR] glade-gtk2
             cd $SOURCE_DIR/libxfce4ui
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -495,7 +495,8 @@ case $1 in
                             --localstatedir=/var \
                             --disable-static \
                             --enable-gtk-doc \
-                            --disable-debug
+                            --disable-debug \
+                            --enable-tests
             make
             sudo make install
         )
@@ -571,7 +572,7 @@ case $1 in
             echo "================================================================"
             echo thunar
             echo "================================================================"
-            #sudo pacman -S libexif libpng gvfs
+            #sudo pacman -S libexif libpng gvfs gobject-introspection
             cd $SOURCE_DIR/thunar
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -581,11 +582,12 @@ case $1 in
                             --disable-static \
                             --disable-debug \
                             --enable-gio-unix \
-                            --enable-dbus \
                             --enable-gudev \
                             --enable-notifications \
                             --enable-exif \
-                            --enable-pcre
+                            --enable-pcre \
+                            --enable-gtk-doc \
+                            --enable-introspection
             make
             sudo make install
         )
@@ -599,7 +601,7 @@ case $1 in
             echo "================================================================"
             #sudo pacman -S libxklavier xf86-input-libinput
             # 04MAR15 - removed upower dependency and changed to --disable-upower-glib 
-            # 04MAY15 - added libinput dependency and built with --enable-xorg-libinput (but not installing xf86-input-libinput instead using xf86-input-synaptics)
+            # 04MAY15 - added libinput dependency and built with --enable-xorg-libinput
             cd $SOURCE_DIR/xfce4-settings
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -656,8 +658,8 @@ case $1 in
                             --disable-debug \
                             --enable-compositor \
                             --enable-xsync \
-                            --enable-epoxy
-            #               --enable-xpresent (for tearing if vid driver supports it)
+                            --enable-epoxy \
+                            --enable-xpresent 
             make
             sudo make install
         )
@@ -733,23 +735,28 @@ case $1 in
             #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib
             # 23DEC16 - libopenraw patch
             # 10MAY17 - gst patches + msoffice patch
+            # June 2018 - freetype2 in Arch is not building optional freetype-config binary
+            #   font thumbnailer will not build
+            #   copied freetype-config script from ubuntu to /usr/local/bin
             cd $SOURCE_DIR/tumbler
-            
-            ### patches
-            # mp3 covers
-            #patch -p1 < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0001-tumbler_audio_covers.patch
-            # webp
-            #patch -p1 < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0002-tumbler_webp-thumbnailer.patch
 
             make clean
+
+            ### patches
+            # mp3 covers
+            patch -p1 < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0001-tumbler_audio_covers.patch
+
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib/xfce4 \
                             --localstatedir=/var \
                             --disable-static \
-                            --disable-debug 
+                            --disable-debug
             make
             sudo make install
+
+            #reverse patches
+            patch -p1 -R < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0001-tumbler_audio_covers.patch
         )
 
         echo $xXFCE_CORE | grep thunar-volman && 
@@ -826,22 +833,22 @@ case $1 in
         ###################################################################################
         ###################################################################################
 
-        echo $xXFCE_BINDINGS | grep xfce4-vala && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-vala
-            echo "================================================================"
-            #need to have vala 0.26 installed first for xfce4-vala to compile
-            cd $SOURCE_DIR
-            wget http://download.gnome.org/sources/vala/0.26/vala-0.26.2.tar.xz
-            tar -xJf vala-0.26.2.tar.xz
-            cd vala-0.26.2
-            ./configure --prefix=/usr
-            make
-            sudo make install
-        )
+#        echo $xXFCE_BINDINGS | grep xfce4-vala && 
+#        (
+#            echo
+#            echo
+#            echo "================================================================"
+#            echo xfce4-vala
+#            echo "================================================================"
+#            #need to have vala 0.26 installed first for xfce4-vala to compile
+#            cd $SOURCE_DIR
+#            wget http://download.gnome.org/sources/vala/0.26/vala-0.26.2.tar.xz
+#            tar -xJf vala-0.26.2.tar.xz
+#            cd vala-0.26.2
+#            ./configure --prefix=/usr
+#            make
+#            sudo make install
+#        )
 
         echo $xXFCE_BINDINGS | grep xfce4-vala && 
         (
@@ -859,6 +866,25 @@ case $1 in
             make
             sudo make install
         )
+
+        echo $xXFCE_BINDINGS | grep thunarx-python && 
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo thunarx-python 
+            echo "================================================================"
+            cd $SOURCE_DIR/thunarx-python
+            make clean
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --libexecdir=/usr/lib \
+                            --localstatedir=/var \
+                            --enable-gtk-doc
+            make
+            sudo make install
+        )
+
 
         ###################################################################################
         ###################################################################################
@@ -1303,6 +1329,10 @@ case $1 in
             echo xfce4-generic-slider
             echo "================================================================"
             cd $SOURCE_DIR/xfce4-generic-slider
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --disable-static \
+                            --disable-debug
             make clean       
             make
             sudo make install
@@ -1372,12 +1402,8 @@ case $1 in
             #sudo pacman -S cmake menulibre(AUR)
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
-            #find . -iwholename '*cmake*' -not -name CMakeLists.txt -delete
-            #rm -rf build && mkdir build && cd build
-            cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
-            ninja 
-            cd ..
-            sudo ninja -C build install    
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib
+            sudo make install
         )
 
         echo $xXFCE_PLUGINS | grep xfce4-pulseaudio-plugin && 
@@ -1424,6 +1450,23 @@ case $1 in
             echo "================================================================"
             #sudo pacman -S libdbusmenu-gtk3
             cd $SOURCE_DIR/xfce4-statusnotifier-plugin
+            make clean   
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --disable-static \
+                            --disable-debug    
+            make
+            sudo make install
+        )
+
+        echo $xXFCE_PLUGINS | grep xfce4-stopwatch-plugin && 
+        (
+            echo
+            echo "================================================================"
+            echo xfce4-stopwatch-plugin
+            echo "================================================================"
+            #sudo pacman -S libxf86misc
+            cd $SOURCE_DIR/xfce4-stopwatch-plugin
             make clean   
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
@@ -1677,12 +1720,12 @@ case $1 in
                             --sysconfdir=/etc \
                             --disable-static \
                             --disable-debug \
-			    --enable-gen-doc
+			                --enable-gen-doc
             make
             sudo make install
         )
 
-        echo $xXFCE_APPS | grep xfce4-volumed && 
+        echo $xXFCE_APPS | grep "xfce4-volumed " && 
         (
             echo
             echo
@@ -1705,7 +1748,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-volumed-pulse
             echo "================================================================"
-            #sudo pacman -S libkeybinder2
+            #sudo pacman -S libkeybinder3
             cd $SOURCE_DIR/xfce4-volumed-pulse
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1741,6 +1784,7 @@ case $1 in
             echo orage
             echo "================================================================"
             #sudo pacman -S libical
+            #needs patch to build against libical3 - https://bugzilla.xfce.org/show_bug.cgi?id=13997
             cd $SOURCE_DIR/orage
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1819,6 +1863,66 @@ case $1 in
             sudo make install
         )
 
+        echo $xXFCE_APPS | grep catfish &&
+        (
+            echo
+            echo
+            echo "==============================================================="
+            echo catfish
+            echo "================================================================"
+            cd $SOURCE_DIR/catfish
+            python setup.py build
+            sudo python setup.py install --optimize=1
+            sudo install -d "/usr/share/pixmaps"
+            sudo ln -sf "/usr/share/icons/hicolor/scalable/apps/catfish.svg" "/usr/share/pixmaps/catfish.svg"
+        )    
+
+        cd $SOURCE_DIR
+        
+        echo $xXFCE_APPS | grep xfce4-panel-profiles &&
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo xfce4-panel-profiles
+            echo "================================================================"
+       
+            cd $SOURCE_DIR/xfce4-panel-profiles
+
+            ./configure --prefix=/usr --python=python
+            make 
+            sudo make install
+         )
+
+        cd $SOURCE_DIR
+
+        echo $xXFCE_APPS | grep xfce4-sceensaver &&
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo xfce4-screensaver
+            echo "================================================================"
+       
+            cd $SOURCE_DIR/xfce4-screensaver
+
+            ./autogen.sh \
+               --prefix=/usr \
+               --libexecdir=/usr/lib/xfce4 \
+               --sysconfdir=/etc \
+               --with-xscreensaverdir=/usr/share/screensaver/config \
+               --with-xscreensaverhackdir=/usr/lib/xscreensaver \
+               --with-mit-ext \
+               --with-libnotify \
+               --enable-locking \
+               --with-gtk=3.0 \
+               --without-console-kit \
+               --disable-static
+            make 
+            #sudo make install
+         )
+        
+        cd $SOURCE_DIR
 
         ###################################################################################
         ###################################################################################
@@ -2048,30 +2152,6 @@ case $1 in
             fi
         )
 
-
-        cd $SOURCE_DIR
-        
-        echo $XFPANEL_SWITCH_ENABLED | grep yes && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfpanel-switch
-            echo "================================================================"
-       
-            if [ -d $SOURCE_DIR/xfpanel-switch ]; then
-                rm -rf $SOURCE_DIR/xfpanel-switch                
-            fi
-            
-            bzr branch lp:xfpanel-switch 
-            echo -n "xfpanel-switch " >> /tmp/external_apps                   
-
-            cd $SOURCE_DIR/xfpanel-switch
-
-            ./configure && make && sudo make install
-         )
-
-
         cd $SOURCE_DIR        
               
         ###################################################################################
@@ -2117,4 +2197,3 @@ case $1 in
 esac
 
 exit 0
-
