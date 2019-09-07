@@ -1,6 +1,6 @@
 #!/bin/bash
 # for Arch: XFCE GIT BUILD/UPDATE SCRIPT
-# Requires: git yaourt bzr wget
+# Requires: git bzr wget
 # Optional: screen
 ###################################################################################
 # use "screen -L" to create a log file of the install/update
