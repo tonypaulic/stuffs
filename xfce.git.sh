@@ -6,7 +6,9 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: October 15 2018
+# Last updated: August 5 2019
+# https://bit.ly/2KhohzT
+# https://bit.ly/2YSl6XP
 
 export PYTHONPATH="/usr/share/glib-2.0"
 
@@ -18,7 +20,7 @@ cd $SOURCE_DIR
 ###################################################################################
 
 
-###################################################################################
+####################################################################################
 # list of Xfce core components
 XFCE_CORE="     xfce4-dev-tools 
                 libxfce4util 
@@ -81,7 +83,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-whiskermenu-plugin
                 xfce4-pulseaudio-plugin
                 xfce4-calculator-plugin
-                xfce4-notes-plugin
                 xfce4-battery-plugin
                 xfce4-statusnotifier-plugin
                 xfce4-hardware-monitor-plugin
@@ -98,8 +99,8 @@ XFCE_PLUGINS="  xfce4-weather-plugin
 #   xfce4-wmdock-plugin - requires libxfcegui4
 #   xfce4-kbdleds-plugin - moved to archive
 # incomplete build:
-#   xfce4-indicator-plugin - ido/vala conflicts, missing header file
 #   xfce4-taskbar-plugin - Apr 2 17, builds but crashes on start
+#   xfce4-notes-plugin - requires xfce4-vala
 
 # list of thunar plugins
 THUNAR_PLUGINS="thunar-archive-plugin 
@@ -119,7 +120,6 @@ XFCE_APPS="     gigolo
                 xfce4-screenshooter 
                 xfce4-volumed-pulse
                 xfce4-terminal 
-                orage
                 xfce4-taskmanager
                 xfce4-dict
                 xfdashboard
@@ -132,8 +132,9 @@ XFCE_APPS="     gigolo
 #   xfbib
 #   xfvnc - built manually. Needs patch to upgrade to libxfce4ui-1 (see AUR)
 #   squeeze  (prefer file-roller/engrampa)
-#   xfce4-mixer - dependentent on gstreamer0.10 which is no longer maintained
+#   xfce4-mixer - dependentent on gstreamer0.10 which is no longer maintained (also libkeybinder2)
 #   xfce4-volumed - superceeded by xfce4-volumed-pulse
+#   orage - no longer compiles
                 
 # list of Xfce art
 XFCE_ART="xfwm4-themes"
@@ -141,16 +142,7 @@ XFCE_ART="xfwm4-themes"
 #   xfce4-artwork - old wallpapers
 #   xfce4-icon-theme - old theme
 
-# Other Xfce packages not hosted on git.xfce.org
-SYSINFO_ENABLED="yes"
-WINDOWCK_ENABLED="no" #no longer works as of late 2017
-GTK_THEME_CONFIG_ENABLED="no"
-XFCE_THEME_MANAGER_ENABLED="no"
-XFWM_COMPOSITE_EDITOR_ENABLED="no"
-EQUAKE_PLUGIN_ENABLED="no"
-XFCE4_HOTCORNER_PLUGIN_ENABLED="no" #no longer works as of 30April2017
-
-# listing of packages to build (with pending git changes)
+# DO NOT EDIT - listing of packages to build (with pending git changes)
 xXFCE_CORE=""
 xXFCE_ARCHIVE=""
 xXFCE_BINDINGS=""
@@ -158,7 +150,6 @@ xXFCE_PLUGINS=""
 xTHUNAR_PLUGINS=""
 xXFCE_APPS=""
 xXFCE_ART=""
-xXFCE_OTHER=""
 
 ##################################################################################
 
@@ -206,41 +197,28 @@ case $1 in
         # Arch Linux (pacman)
         which pacman > /dev/null 2>&1 &&
         (sudo pacman -S \
-            xdg-utils xdg-user-dirs xdg-user-dirs-gtk \
-            intltool gtk-doc \
-            dbus-glib perl-extutils-depends perl-extutils-pkgconfig glib-perl \
-            gtk2 gtk3 hicolor-icon-theme startup-notification glade \
-            libnotify perl-uri \
-            desktop-file-utils libwnck libwnck3 \
-            libexif libpng gvfs gobject-introspection \
-            libxklavier xf86-input-libinput \
-            libsm xorg-iceauth \
-            libepoxy \
-            gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib \
-            udisks2 upower \
-            libxml2 \
-            libindicator-gtk3 \
-            gnu-netcat hddtemp lm_sensors libxnvctrl \
-            libunique \
-            qrencode \
-            libgnomecanvas libgnomecanvas libglademm autoconf-archive \
-            cmake \
-            libkeybinder3 \
-            gtksourceview2 gtksourceview3 \
-            taglib gstreamer gst-libav clutter-gtk clutter-gst \
-            libburn libisofs \
-            libkeybinder2 \
-            vte3 gnome-doc-utils \
-            libical \
-            libgksu \
-            libwnck clutter cogl dbus-glib libwnck3 \
-            libmpd \
-            libglade \
+            autoconf-archive \
             bzr \
-            vala \
-            wget libdbusmenu-gtk3
+            clutter cmake \
+            dbus-glib desktop-file-utils docbook-xsl \
+            ffmpegthumbnailer freetype2 \
+            gdk-pixbuf2 glade glib-perl gnome-doc-utils gnu-netcat gobject-introspection \
+            	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs \
+            hddtemp hicolor-icon-theme \
+            intltool \
+            libburn libdbusmenu-gtk3 libepoxy libexif libglade libgsf libical libindicator-gtk3 \
+            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libunique libwnck3 \
+            	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
+            perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
+            	python-dbus python-distutils-extra python-gobject python-pexpect \
+            qrencode gtksourceview2 gtksourceview3 \
+            startup-notification \
+            taglib \
+            udisks2 upower \
+            vala vte3 \
+            wget \
+            xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
         ) 
-        # 15Dec2016 - gtkhotkey no longer in repositories - use AUR
 
         # vala 0.16.1 - don't remember why we need this version
         #wget http://download.gnome.org/sources/vala/0.16/vala-0.16.1.tar.xz
@@ -250,32 +228,6 @@ case $1 in
         #make
         #sudo make install
         #cd ..
-
-        # xfwm4 extra libs (pacman yaourt)
-        which pacman > /dev/null 2>&1 &&
-            (yaourt libxpresent)
-
-        # indicator plugin requirement (pacman yaourt)
-        which pacman > /dev/null 2>&1 &&
-            (yaourt ido)
-
-        # xfce4-whiskermenu-plugin requirement (pacman yaourt)
-        which pacman > /dev/null 2>&1 &&
-            (yaourt menulibre)
-
-        # gtkhotkey required
-        which pacman > /dev/null 2>&1 &&
-            (yaourt gtkhotkey)
-
-        # glade-gtk2 - not building it any more
-        #which pacman > /dev/null 2>&1 &&
-        #    (yaourt glade-gtk2)
-
-        # fixes for missing m4 directories
-        echo $xXFCE_APPS | grep squeeze && 
-        (
-            mkdir squeeze/m4
-        )            
 
         echo "System initialized. Now run with update-all parameter."          
 
@@ -311,7 +263,7 @@ case $1 in
             else
                 git pull git://git.xfce.org/archive/$package
                 xXFCE_ARCHIVE="$xXFCE_ARCHIVE$package "
-                fi
+            fi
             cd ..
         done
         for package in $XFCE_BINDINGS
@@ -452,7 +404,8 @@ case $1 in
                             --localstatedir=/var \
                             --disable-static \
                             --disable-debug \
-                            --enable-gtk-doc
+                            --enable-gtk-doc \
+                            --enable-vala
             make
             sudo make install
         )
@@ -474,6 +427,7 @@ case $1 in
                             --disable-static \
                             --disable-debug \
                             --enable-gtk-doc \
+                            --disable-gsettings-backend \
                             --with-perl-options=INSTALLDIRS="vendor" 
             make
             sudo make install
@@ -549,7 +503,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-panel
             echo "================================================================"
-            #sudo pacman -S desktop-file-utils libwnck libwnck3
+            #sudo pacman -S desktop-file-utils libwnck3
             cd $SOURCE_DIR/xfce4-panel
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -559,7 +513,9 @@ case $1 in
                             --disable-static \
                             --enable-gtk-doc \
                             --enable-gio-unix \
-                            --disable-debug
+                            --enable-gtk2 \
+                            --disable-debug \
+                            --enable-vala
             #   --enable-debug=gdb
             make
             sudo make install
@@ -646,20 +602,23 @@ case $1 in
             echo "================================================================"
             echo xfwm4
             echo "================================================================"
-           #sudo pacman -S libepoxy     
-	       # [AUR] libxpresent
+           #sudo pacman -S libepoxy libxpresent
             cd $SOURCE_DIR/xfwm4
             make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --localstatedir=/var \
-                            --disable-static \
-                            --disable-debug \
-                            --enable-compositor \
-                            --enable-xsync \
-                            --enable-epoxy \
-                            --enable-xpresent 
+				./autogen.sh	--prefix=/usr \
+									--libexecdir=/usr/lib \
+									--sysconfdir=/etc \
+									--localstatedir=/var \
+									--disable-dependency-tracking \
+									--disable-static \
+									--enable-epoxy \
+									--enable-startup-notification \
+									--enable-xsync \
+									--enable-render \
+									--enable-randr \
+									--enable-xpresent \
+									--enable-compositor \
+									--disable-debug
             make
             sudo make install
         )
@@ -699,7 +658,6 @@ case $1 in
                             --libexecdir=/usr/lib \
                             --localstatedir=/var \
                             --disable-static \
-                            --enable-gtk3 \
                             --disable-debug 
             make
             sudo make install
@@ -733,19 +691,8 @@ case $1 in
             echo tumbler
             echo "================================================================"
             #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib
-            # 23DEC16 - libopenraw patch
-            # 10MAY17 - gst patches + msoffice patch
-            # June 2018 - freetype2 in Arch is not building optional freetype-config binary
-            #   font thumbnailer will not build
-            #   copied freetype-config script from ubuntu to /usr/local/bin
             cd $SOURCE_DIR/tumbler
-
             make clean
-
-            ### patches
-            # mp3 covers
-            patch -p1 < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0001-tumbler_audio_covers.patch
-
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib/xfce4 \
@@ -754,9 +701,6 @@ case $1 in
                             --disable-debug
             make
             sudo make install
-
-            #reverse patches
-            patch -p1 -R < ~/Dropbox/Development/Xfce/PATCHES/tumbler/0001-tumbler_audio_covers.patch
         )
 
         echo $xXFCE_CORE | grep thunar-volman && 
@@ -847,8 +791,7 @@ case $1 in
 #            cd vala-0.26.2
 #            ./configure --prefix=/usr
 #            make
-#            sudo make install
-#        )
+#            sudo make install        )
 
         echo $xXFCE_BINDINGS | grep xfce4-vala && 
         (
@@ -1579,7 +1522,7 @@ case $1 in
             echo "================================================================"
             echo mousepad
             echo "================================================================"
-            #sudo pacman -S gtksourceview2 gtksourceview3
+            #sudo pacman -S gtksourceview3
             cd $SOURCE_DIR/mousepad
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1599,7 +1542,8 @@ case $1 in
             echo "================================================================"
             echo parole
             echo "================================================================"
-            #sudo pacman -S taglib gstreamer gst-libav clutter-gtk clutter-gst
+            #sudo pacman -S taglib gstreamer gst-libav 
+            # clutter clutter-gtk clutter-gst cogl (blacklisted - not working properly)
             cd $SOURCE_DIR/parole
             rm -rf m4
             make clean
@@ -1608,10 +1552,10 @@ case $1 in
                             --sysconfdir=/etc \
                             --disable-static \
                             --disable-debug \
-                            --enable-gtk-doc \
-                            --enable-clutter 
+                            --enable-gtk-doc 
+                            # --enable-clutter 
                             #(https://bugzilla.xfce.org/show_bug.cgi?id=11825)
-                            #blacklisted 26FEB2017
+                            #clutter blacklisted 26FEB2017
             make
             sudo make install
         )
@@ -1802,14 +1746,13 @@ case $1 in
             echo "================================================================"
             echo xfce4-taskmanager
             echo "================================================================"
-            #sudo pacman -S libgksu
+				# optional libgksu
             cd $SOURCE_DIR/xfce4-taskmanager
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
                             --disable-static \
-                            --disable-debug \
-                            --enable-gtk3
+                            --disable-debug
             make
             sudo make install
         )
@@ -1838,8 +1781,7 @@ case $1 in
             echo "================================================================"
             echo xfdashboard
             echo "================================================================"
-            #sudo pacman -S libwnck clutter cogl gio gio-unix dbus-glib libwnck3
-            # 04MAR15 - added libwnck3 as dependency
+            #sudo pacman -S clutter cogl gio gio-unix dbus-glib libwnck3
             cd $SOURCE_DIR/xfdashboard
             make clean
            ./autogen.sh --prefix=/usr  --sysconfdir=/etc --disable-dependency-tracking
@@ -1870,13 +1812,14 @@ case $1 in
             echo "==============================================================="
             echo catfish
             echo "================================================================"
+            # pacman -S python-distutils-extra python-dbus python-pexpect
             cd $SOURCE_DIR/catfish
+            rm -f po/catfish.pot
             python setup.py build
             sudo python setup.py install --optimize=1
             sudo install -d "/usr/share/pixmaps"
             sudo ln -sf "/usr/share/icons/hicolor/scalable/apps/catfish.svg" "/usr/share/pixmaps/catfish.svg"
         )    
-
         cd $SOURCE_DIR
         
         echo $xXFCE_APPS | grep xfce4-panel-profiles &&
@@ -1886,7 +1829,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-panel-profiles
             echo "================================================================"
-       
+       		# python-gobject 
             cd $SOURCE_DIR/xfce4-panel-profiles
 
             ./configure --prefix=/usr --python=python
@@ -1896,30 +1839,25 @@ case $1 in
 
         cd $SOURCE_DIR
 
-        echo $xXFCE_APPS | grep xfce4-sceensaver &&
+        echo $xXFCE_APPS | grep xfce4-screensaver &&
         (
             echo
             echo
             echo "================================================================"
             echo xfce4-screensaver
             echo "================================================================"
-       
+       		#pacman -S xmlto docbook-xsl libxss
             cd $SOURCE_DIR/xfce4-screensaver
 
-            ./autogen.sh \
-               --prefix=/usr \
-               --libexecdir=/usr/lib/xfce4 \
-               --sysconfdir=/etc \
-               --with-xscreensaverdir=/usr/share/screensaver/config \
-               --with-xscreensaverhackdir=/usr/lib/xscreensaver \
-               --with-mit-ext \
-               --with-libnotify \
-               --enable-locking \
-               --with-gtk=3.0 \
-               --without-console-kit \
-               --disable-static
+				./autogen.sh \
+				  		--prefix=/usr \
+						--sysconfdir=/etc \
+						--libexecdir="/usr/lib/xfce4-screensaver" \
+						--enable-docbook-docs \
+						--disable-dependency-tracking
+            sed -i -e '/\$CC/s/-shared/\0 -Wl,--as-needed/' libtool
             make 
-            #sudo make install
+            sudo make install
          )
         
         cd $SOURCE_DIR
@@ -1948,210 +1886,6 @@ case $1 in
             sudo make install
         )
 
-
-        ###################################################################################
-        ###################################################################################
-        # Others
-        ###################################################################################
-        ###################################################################################
-
-        > /tmp/external_apps
-
-        echo $WINDOWCK_ENABLED | grep yes && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-windowck-plugin
-            echo "================================================================"
-            
-            if [ ! -d $SOURCE_DIR/xfce4-windowck-plugin ]; then
-                cd $SOURCE_DIR
-                git clone https://github.com/cedl38/xfce4-windowck-plugin.git
-            fi
-       
-            cd $SOURCE_DIR/xfce4-windowck-plugin
-
-            git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') && "$1" != "update-all" ]]; then
-                echo "xfce4-windowck-plugin -> #####################Nothing to do"
-            else
-                echo -n "xfce4-windowck-plugin " >> /tmp/external_apps
-                git pull https://github.com/cedl38/xfce4-windowck-plugin.git
-                make clean
-                ./autogen.sh    --prefix=/usr \
-                   --sysconfdir=/etc \
-                   --libexecdir=/usr/lib \
-                   --localstatedir=/var
-                make
-                sudo make install
-            fi
-        )
-        
-        echo $SYSINFO_ENABLED | grep yes && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-sysinfo-plugin
-            echo "================================================================"
-            
-            if [ ! -d $SOURCE_DIR/xfce4-sysinfo-plugin ]; then
-                cd $SOURCE_DIR
-                git clone https://github.com/jarro2783/xfce4-sysinfo-plugin.git
-            fi
-       
-            cd $SOURCE_DIR/xfce4-sysinfo-plugin
-
-            git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') && "$1" != "update-all" ]]; then
-                echo "xfce4-sysinfo-plugin -> #####################Nothing to do"
-            else
-                echo -n "xfce4-sysinfo-plugin " >> /tmp/external_apps
-                git pull https://github.com/jarro2783/xfce4-sysinfo-plugin.git
-                make clean
-                ./autogen.sh    --prefix=/usr \
-                                --sysconfdir=/etc \
-                                --libexecdir=/usr/lib \
-                                --localstatedir=/var
-                make
-                sudo make install
-              
-            fi
-        )
-        
-        echo $GTK_THEME_CONFIG_ENABLED | grep yes && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo gtk-theme-config
-            echo "================================================================"
-       
-            if [ ! -d $SOURCE_DIR/gtk-theme-config ]; then
-                cd $SOURCE_DIR
-                git clone https://github.com/satya164/gtk-theme-config.git
-            fi
-                   
-            cd $SOURCE_DIR/gtk-theme-config
-
-            git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') && "$1" != "update-all" ]]; then
-                echo "gtk-theme-config -> #####################Nothing to do"
-            else
-                echo -n "gtk-theme-config " >> /tmp/external_apps
-                git pull https://github.com/satya164/gtk-theme-config.git
-                make clean   
-                make
-                sudo make install
-            fi
-        )
-
-        echo $XFCE_THEME_MANAGER_ENABLED | grep yes && 
-        (
-            echo -n "xfce-theme-manager " >> /tmp/external_apps
-            echo
-            echo
-            echo "================================================================"
-            echo xfce-theme-manager
-            echo "================================================================"
-       
-            if [ ! -d $SOURCE_DIR/xfce-theme-manager ]; then
-                mkdir $SOURCE_DIR/xfce-theme-manager
-            fi
-               
-            cd $SOURCE_DIR/xfce-theme-manager
-            rm -rf $SOURCE_DIR/xfce-theme-manager/Xfce-Theme-Manager*
-            wget http://keithhedger.hostingsiteforfree.com/zips/xfcethememanager/Xfce-Theme-Manager-0.3.6.tar.gz
-            tar xzvf Xfce-Theme-Manager-0.3.6.tar.gz
-            cd Xfce-Theme-Manager-0.3.6
-            ./configure --prefix=/usr
-            sudo make clean
-            make
-            sudo make install
-        )
-
-
-        echo $XFWM_COMPOSITE_EDITOR_ENABLED | grep yes && 
-        (
-            echo -n "xfwm-composite-editor " >> /tmp/external_apps
-            echo
-            echo
-            echo "================================================================"
-            echo xfwm-composite-editor
-            echo "================================================================"
-       
-            if [ ! -d $SOURCE_DIR/xfwm-composite-editor ]; then
-                mkdir $SOURCE_DIR/xfwm-composite-editor
-            fi
-   
-            cd $SOURCE_DIR/xfwm-composite-editor
-            rm -rf $SOURCE_DIR/xfwm-composite-editor/Xfwm4CompositeEditor*
-            wget http://keithhedger.hostingsiteforfree.com/zips/Xfwm4CompositeEditor-0.2.0.tar.gz
-            tar xzvf Xfwm4CompositeEditor-0.2.0.tar.gz
-            cd Xfwm4CompositeEditor-0.2.0
-            ./configure --prefix=/usr
-            sudo make clean
-            make
-            sudo make install
-        )
-
- 
-        cd $SOURCE_DIR
-
-        echo $EQUAKE_PLUGIN_ENABLED | grep yes && 
-        (
-            echo -n "xfce4-equake-plugin " >> /tmp/external_apps
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-equake-plugin
-            echo "================================================================"
-       
-            if [ ! -d $SOURCE_DIR/xfce4-equake-plugin ]; then
-                mkdir $SOURCE_DIR/xfce4-equake-plugin
-            fi
-   
-            cd $SOURCE_DIR/xfce4-equake-plugin
-            rm -rf $SOURCE_DIR/xfce4-equake-plugin/*
-            wget http://sourceforge.net/projects/equake/files/latest/download -O equake.tar.gz
-            tar xzvf equake.tar.gz
-            cd xfce4-equake-plugin*
-            sudo make clean
-            ./configure --prefix=/usr
-            make
-            sudo make install
-        )
-
-
-        cd $SOURCE_DIR
-
-        echo $XFCE4_HOTCORNER_PLUGIN_ENABLED | grep yes && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-hotcorner-plugin
-            echo "================================================================"
-       
-            if [ ! -d $SOURCE_DIR/xfce4-hotcorner-plugin ]; then
-                cd $SOURCE_DIR
-                git clone git://github.com/brianhsu/xfce4-hotcorner-plugin.git
-            fi
-                   
-            cd $SOURCE_DIR/xfce4-hotcorner-plugin
-
-            git remote update
-            if [[ $(git status -uno | grep 'Your branch is up-to-date') && "$1" != "update-all" ]]; then
-                echo "xfce4-hotcorner-plugin -> #####################Nothing to do"
-            else
-                echo -n "xfce4-hotcorner-plugin " >> /tmp/external_apps
-                git pull git://github.com/brianhsu/xfce4-hotcorner-plugin.git
-                cmake -DCMAKE_INSTALL_PREFIX=/usr .
-                sudo make install
-            fi
-        )
-
         cd $SOURCE_DIR        
               
         ###################################################################################
@@ -2175,7 +1909,6 @@ case $1 in
         echo "THUNAR_PLUGINS= $(echo $xTHUNAR_PLUGINS | sed -e 's/ /\n\t\t/g')"
         echo "XFCE_APPS     = $(echo $xXFCE_APPS | sed -e 's/ /\n\t\t/g')"
         echo "XFCE_ART      = $(echo $xXFCE_ART | sed -e 's/ /\n\t/g')"
-        echo "XFCE_OTHER    = $(cat /tmp/external_apps | sed -e 's/ /\n\t\t/g')"
         echo "================================================================"
         echo "================================================================"
         echo "Done. Log out and back in again."
@@ -2183,9 +1916,9 @@ case $1 in
         echo "================================================================"
         ;;
     *)
-        echo "ToZ's Xfce from git script (2015/16/17)"
+        echo "ToZ's Xfce from git script"
         echo "Built on base arch install"
-        echo "Will only work on Arch Linux!!!"
+        echo "Tested only on Arch Linux!!!"
         echo
         echo "Usage: $0 <action>"
         echo "   init -> initialize the build environment MUST BE RUN FIRST!!!"
