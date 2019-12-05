@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: August 5 2019
+# Last updated: December 3 2019
 # https://bit.ly/2KhohzT
 # https://bit.ly/2YSl6XP
 
@@ -46,13 +46,14 @@ XFCE_ARCHIVE=""
 #   libxfcegui4 - retired and archived (many plugins still depend on this)
 
 #list of Xfce bindings
-XFCE_BINDINGS=" thunarx-python"
+XFCE_BINDINGS=""
 #not being built:
 #   xfce4-vala (does not build requires garcon 0.2.0)
 #   garcon-vala
 #   pyxfce
 #   xfc
 #   xfce4-mm
+#	 thunarx-python - not working Nov16,2019 - as of python 3.8
 
 # list of Xfce plugins
 XFCE_PLUGINS="  xfce4-weather-plugin 
@@ -76,7 +77,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-datetime-plugin
                 xfce4-cpugraph-plugin
                 xfce4-diskperf-plugin
-                xfce4-generic-slider
                 xfce4-smartbookmark-plugin
                 xfce4-indicator-plugin
                 xfce4-verve-plugin
@@ -85,7 +85,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin
                 xfce4-calculator-plugin
                 xfce4-battery-plugin
                 xfce4-statusnotifier-plugin
-                xfce4-hardware-monitor-plugin
                 xfce4-stopwatch-plugin"
 # not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
@@ -98,6 +97,8 @@ XFCE_PLUGINS="  xfce4-weather-plugin
 #   xfce4-teatime-plugin - compiles but doesn't work
 #   xfce4-wmdock-plugin - requires libxfcegui4
 #   xfce4-kbdleds-plugin - moved to archive
+#   xfce4-generic-slider - archived
+#   xfce4-hardware-monitor-plugin - archived
 # incomplete build:
 #   xfce4-taskbar-plugin - Apr 2 17, builds but crashes on start
 #   xfce4-notes-plugin - requires xfce4-vala
@@ -137,10 +138,11 @@ XFCE_APPS="     gigolo
 #   orage - no longer compiles
                 
 # list of Xfce art
-XFCE_ART="xfwm4-themes"
+XFCE_ART=""
 #not being built:
 #   xfce4-artwork - old wallpapers
 #   xfce4-icon-theme - old theme
+#   xfwm4-themes - archived
 
 # DO NOT EDIT - listing of packages to build (with pending git changes)
 xXFCE_CORE=""
@@ -218,6 +220,7 @@ case $1 in
             vala vte3 \
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
+            libgtop
         ) 
 
         # vala 0.16.1 - don't remember why we need this version
@@ -395,7 +398,7 @@ case $1 in
             echo "================================================================"
             echo libxfce4util
             echo "================================================================"
-            #sudo pacman -S intltool gtk-doc
+            #sudo pacman -S intltool gtk-doc libgtop
             cd $SOURCE_DIR/libxfce4util
             make clean
             ./autogen.sh    --prefix=/usr \
