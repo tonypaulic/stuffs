@@ -1817,7 +1817,7 @@ case $1 in
             echo "================================================================"
             # pacman -S python-distutils-extra python-dbus python-pexpect
             cd $SOURCE_DIR/catfish
-            rm -f po/catfish.pot
+            #rm -f po/catfish.pot
             python setup.py build
             sudo python setup.py install --optimize=1
             sudo install -d "/usr/share/pixmaps"
