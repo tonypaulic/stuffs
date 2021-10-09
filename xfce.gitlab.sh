@@ -426,8 +426,8 @@ case $1 in
                             --disable-debug \
                             --enable-gtk-doc \
                             --disable-gsettings-backend \
-                            --disable-dependency-tracking \
-                            --with-perl-options=INSTALLDIRS="vendor" 
+                            --disable-dependency-tracking 
+            #                --with-perl-options=INSTALLDIRS="vendor" 
             make
             sudo make install
         )
