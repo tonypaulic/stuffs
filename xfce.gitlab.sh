@@ -80,7 +80,9 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
                 xfce4-calculator-plugin.git
                 xfce4-battery-plugin.git
                 xfce4-statusnotifier-plugin.git
-                xfce4-stopwatch-plugin.git"
+                xfce4-stopwatch-plugin.git
+		xfce4-docklike-plugin.git
+		xfce4-windowck-plugin.git"
 # not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
 #   xfce4-equake-plugin - hosted on sourceforge - see below
@@ -1409,6 +1411,40 @@ case $1 in
             echo "================================================================"
             #sudo pacman -S libxf86misc
             cd $SOURCE_DIR/xfce4-stopwatch-plugin
+            make clean   
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --disable-static \
+                            --disable-debug    
+            make
+            sudo make install
+        )
+
+        echo $xXFCE_PLUGINS | grep xfce4-docklike-plugin && 
+        (
+            echo
+            echo "================================================================"
+            echo xfce4-docklike-plugin
+            echo "================================================================"
+            #sudo pacman -S libwnck3 cairo
+            cd $SOURCE_DIR/xfce4-docklike-plugin
+            make clean   
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --disable-static \
+                            --disable-debug    
+            make
+            sudo make install
+        )
+
+        echo $xXFCE_PLUGINS | grep xfce4-windowck-plugin && 
+        (
+            echo
+            echo "================================================================"
+            echo xfce4-windowck-plugin
+            echo "================================================================"
+            #sudo pacman -S libwnck3
+            cd $SOURCE_DIR/xfce4-windowck-plugin
             make clean   
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
