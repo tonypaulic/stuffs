@@ -219,7 +219,8 @@ case $1 in
             vala vte3 \
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
-            libgtop
+            libgtop \
+	    cairo
         ) 
 
         echo "System initialized. Now run with update-all parameter."          
