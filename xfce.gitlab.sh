@@ -202,7 +202,7 @@ case $1 in
             bzr \
             clutter cmake \
             dbus-glib desktop-file-utils docbook-xsl \
-            ffmpegthumbnailer freetype2 \
+            ffmpegthumbnailer freetype2 libgepub \
             gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
             	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs \
             hddtemp hicolor-icon-theme \
@@ -690,7 +690,7 @@ case $1 in
             echo "================================================================"
             echo tumbler
             echo "================================================================"
-            #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib
+            #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib libgepub
             cd $SOURCE_DIR/tumbler
             make clean
             ./autogen.sh    --prefix=/usr \
