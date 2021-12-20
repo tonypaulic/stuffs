@@ -207,12 +207,12 @@ case $1 in
             	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
-            libburn libdbusmenu-gtk3 libepoxy libexif libglade libgsf libical libindicator-gtk3 \
-            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libunique libwnck3 \
+            libburn libdbusmenu-gtk3 libepoxy libexif libgsf libical libindicator-gtk3 \
+            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
             	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             	python-dbus python-distutils-extra python-gobject python-pexpect \
-            qrencode gtksourceview2 gtksourceview3 \
+            qrencode gtksourceview3 \
             startup-notification \
             taglib \
             udisks2 upower \
