@@ -44,8 +44,8 @@ XFCE_ARCHIVE=""
 #   libxfcegui4 - retired and archived (many plugins still depend on this)
 
 #list of Xfce bindings
-XFCE_BINDINGS=" thunarx-python.git
-                xfce4-vala.git"
+XFCE_BINDINGS=" thunarx-python
+                xfce4-vala"
 #not being built:
 #   garcon-vala
 #   pyxfce
@@ -82,7 +82,8 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
                 xfce4-statusnotifier-plugin.git
                 xfce4-stopwatch-plugin.git
 		xfce4-docklike-plugin.git
-		xfce4-windowck-plugin.git"
+		xfce4-windowck-plugin.git
+		xfce4-notes-plugin.git"
 # not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
 #   xfce4-equake-plugin - hosted on sourceforge - see below
@@ -100,7 +101,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
 #   xfce4-verve-plugin - not GTK3
 # incomplete build:
 #   xfce4-taskbar-plugin - Apr 2 17, builds but crashes on start
-#   xfce4-notes-plugin - GTK3 build not working
 
 # list of thunar plugins
 THUNAR_PLUGINS="thunar-archive-plugin.git
@@ -126,7 +126,8 @@ XFCE_APPS="     gigolo.git
                 xfdashboard.git
                 catfish.git
                 xfce4-panel-profiles.git
-                xfce4-screensaver.git"
+                xfce4-screensaver.git
+		xfmpc.git"
 # not being built:
 #   thunar-thumbnailers
 #   xfbib
@@ -202,17 +203,17 @@ case $1 in
             bzr \
             clutter cmake \
             dbus-glib desktop-file-utils docbook-xsl \
-            ffmpegthumbnailer freetype2 libgepub \
+            ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
             	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
-            libburn libdbusmenu-gtk3 libepoxy libexif libgsf libical libindicator-gtk3 \
-            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
+            libburn libdbusmenu-gtk3 libepoxy libexif libglade libgsf libical libindicator-gtk3 \
+            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libunique libwnck3 \
             	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             	python-dbus python-distutils-extra python-gobject python-pexpect \
-            qrencode gtksourceview3 \
+            qrencode gtksourceview2 gtksourceview3 \
             startup-notification \
             taglib \
             udisks2 upower \
@@ -690,7 +691,7 @@ case $1 in
             echo "================================================================"
             echo tumbler
             echo "================================================================"
-            #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib libgepub
+            #sudo pacman -S gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib
             cd $SOURCE_DIR/tumbler
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -973,8 +974,7 @@ case $1 in
                             --sysconfdir=/etc \
                             --libexecdir=/usr/lib \
                             --disable-static \
-                            --disable-debug \
-                            --enable-gtk3
+                            --disable-debug
             make
             sudo make install
         )
@@ -1832,7 +1832,6 @@ case $1 in
             echo xfmpc
             echo "================================================================"
             #sudo pacman -S libmpd
-            #*** won't compile with vala 0.46 branch
             cd $SOURCE_DIR/xfmpc
             make clean
            ./autogen.sh --prefix=/usr  --sysconfdir=/etc 
