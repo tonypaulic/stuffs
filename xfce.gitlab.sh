@@ -1320,7 +1320,7 @@ case $1 in
             sudo make install
         )
 
-        echo $WHISKERMENU_ENABLED | grep yes && 
+        echo $xXFCE_PLUGINS | grep xfce4-whiskermenu-plugin &&
         (
             echo
             echo
