@@ -205,7 +205,7 @@ case $1 in
             dbus-glib desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
-            	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs \
+            	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs gst-plugins-{bad,ugly} \
             hddtemp hicolor-icon-theme \
             intltool \
             libburn libdbusmenu-gtk3 libepoxy libexif libglade libgsf libical libindicator-gtk3 \
