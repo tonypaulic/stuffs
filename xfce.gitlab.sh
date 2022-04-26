@@ -6,9 +6,10 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: March 25, 2022
+# Last updated: April 26, 2022
 
 export PYTHONPATH="/usr/share/glib-2.0"
+LOG="~/Development/$(date +%s).xfcegit.log"
 
 ###################################################################################
 # directory to hold source files 
@@ -136,8 +137,6 @@ XFCE_APPS="     gigolo.git
 #   squeeze  (prefer file-roller/engrampa)
 #   xfce4-mixer - dependentent on gstreamer0.10 which is no longer maintained (also libkeybinder2)
 #   xfce4-volumed - superceeded by xfce4-volumed-pulse
-#   orage - no longer compiles
-#   xfmpc - errors
 # list of Xfce art
 XFCE_ART=""
 #not being built:
@@ -249,6 +248,8 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_CORE=$xXFCE_CORE" >> $LOG
+	echo 
         for package in $XFCE_ARCHIVE
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -264,6 +265,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_ARCHIVE=$xXFCE_ARCHIVE" >> $LOG
         for package in $XFCE_BINDINGS
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -279,6 +281,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_BINDINGS=$xXFCE_BINDINGS" >> $LOG
         for package in $XFCE_PLUGINS
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -294,6 +297,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_PLUGINS=$xXFCE_PLUGINS" >> $LOG
         for package in $THUNAR_PLUGINS
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -309,6 +313,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xTHUNAR_PLUGINS=$xTHUNAR_PLUGINS" >> $LOG
         for package in $XFCE_APPS
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -324,6 +329,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_APPS=$xXFCE_APPS" >> $LOG
         for package in $XFCE_ART
         do
             p=$(echo $package | awk -F'.' '{print $1}')        
@@ -339,6 +345,7 @@ case $1 in
             fi
             #cd ..
         done
+	echo "xXFCE_ART=$xXFCE_ART" >> $LOG
         ###################################################################################
 
         ###################################################################################
