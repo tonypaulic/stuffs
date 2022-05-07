@@ -45,8 +45,8 @@ XFCE_ARCHIVE=""
 #   libxfcegui4 - retired and archived (many plugins still depend on this)
 
 #list of Xfce bindings
-XFCE_BINDINGS=" thunarx-python
-                xfce4-vala"
+XFCE_BINDINGS=" thunarx-python.git
+                xfce4-vala.git"
 #not being built:
 #   garcon-vala
 #   pyxfce
@@ -129,7 +129,7 @@ XFCE_APPS="     gigolo.git
                 xfce4-panel-profiles.git
                 xfce4-screensaver.git
 		xfmpc.git
-		orage"
+		orage.git"
 # not being built:
 #   thunar-thumbnailers
 #   xfbib
