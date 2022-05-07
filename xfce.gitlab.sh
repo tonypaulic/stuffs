@@ -9,7 +9,7 @@
 # Last updated: May 7, 2022
 
 export PYTHONPATH="/usr/share/glib-2.0"
-LOG="~/Development/$(date +%s).xfcegit.log"
+LOG="$HOME/Development/$(date +%s).xfcegit.log"
 
 ###################################################################################
 # directory to hold source files 
