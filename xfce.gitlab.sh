@@ -213,7 +213,7 @@ case $1 in
             	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             	python-dbus python-distutils-extra python-gobject python-pexpect \
-            qrencode gtksourceview4 \
+            qrencode gtksourceview4 gspell \
             startup-notification \
             taglib \
             udisks2 upower \
