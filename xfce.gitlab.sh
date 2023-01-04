@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: May 7, 2022
+# Last updated: Jan 4, 2023
 
 export PYTHONPATH="/usr/share/glib-2.0"
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
@@ -36,7 +36,8 @@ XFCE_CORE="     xfce4-dev-tools.git
                 xfce4-appfinder.git
                 tumbler.git
                 thunar-volman.git
-                xfce4-power-manager.git"                            
+                xfce4-power-manager.git
+                libxfce4windowing.git"                            
 #   gtk-xfce-engine has disappeared                
 
 #list of Xfce archived packages
@@ -213,7 +214,7 @@ case $1 in
             	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             	python-dbus python-distutils-extra python-gobject python-pexpect \
-            qrencode gtksourceview4 gspell \
+            qrencode gtksourceview3 \
             startup-notification \
             taglib \
             udisks2 upower \
@@ -753,6 +754,27 @@ case $1 in
             make
             sudo make install
         )
+
+        echo $xXFCE_CORE | grep libxfce4windowing && 
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo libxfce4windowing
+            echo "================================================================"
+            cd $SOURCE_DIR/libxfce4windowing
+            make clean
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --libexecdir=/usr/lib \
+                            --localstatedir=/var \
+                            --disable-static \
+                            --enable-gtk-doc \
+                            --disable-debug
+            make
+            sudo make install
+        )
+
 
         ###################################################################################
         ###################################################################################
