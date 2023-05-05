@@ -739,7 +739,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-power-manager
             echo "================================================================"
-            #sudo pacman -S udisks2 upower
+            #sudo pacman -S udisks2 upower gio-unix
             cd $SOURCE_DIR/xfce4-power-manager
             make clean
             ./autogen.sh    --prefix=/usr \
