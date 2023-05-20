@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: Jan 4, 2023
+# Last updated: May 20, 2023
 
 export PYTHONPATH="/usr/share/glib-2.0"
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
@@ -83,10 +83,10 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
                 xfce4-battery-plugin.git
                 xfce4-statusnotifier-plugin.git
                 xfce4-stopwatch-plugin.git
-		xfce4-docklike-plugin.git
-		xfce4-windowck-plugin.git
-		xfce4-notes-plugin.git
-		xfce4-verve-plugin.git"
+		          xfce4-docklike-plugin.git
+	             xfce4-windowck-plugin.git
+                xfce4-notes-plugin.git
+                xfce4-verve-plugin.git"
 # not being built:  
 #   xfce4-cddrive-plugin - requires libxfcegui4
 #   xfce4-equake-plugin - hosted on sourceforge - see below
@@ -739,7 +739,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-power-manager
             echo "================================================================"
-            #sudo pacman -S udisks2 upower gio-unix
+            #sudo pacman -S udisks2 upower
             cd $SOURCE_DIR/xfce4-power-manager
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -1595,8 +1595,8 @@ case $1 in
                             --disable-debug \
                             --sysconfdir=/etc \
                             --disable-static \
-                            --enable-gtk3 \
-                            --disable-debug
+                            --disable-debug \ 
+                            --enable-polkit
             make
             sudo make install
         )
@@ -1693,8 +1693,8 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --disable-static \
-			    --enable-sounds \
+                            --disable-static 
+                            --enable-sounds \
                             --disable-debug 
             make
             sudo make install
