@@ -222,7 +222,8 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    cairo
+	    cairo \
+     		gtk-layer-shell
         ) 
 
         echo "System initialized. Now run with update-all parameter."          
@@ -1357,7 +1358,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-whiskermenu-plugin
             echo "================================================================"
-            #sudo pacman -S cmake menulibre(AUR)
+            #sudo pacman -S cmake gtk-layer-shell menulibre(AUR)
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
             cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib
