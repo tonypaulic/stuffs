@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: May 20, 2023
+# Last updated: Nov 15, 2023
 
 export PYTHONPATH="/usr/share/glib-2.0"
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
@@ -83,8 +83,8 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
                 xfce4-battery-plugin.git
                 xfce4-statusnotifier-plugin.git
                 xfce4-stopwatch-plugin.git
-		          xfce4-docklike-plugin.git
-	             xfce4-windowck-plugin.git
+		        xfce4-docklike-plugin.git
+	            xfce4-windowck-plugin.git
                 xfce4-notes-plugin.git
                 xfce4-verve-plugin.git"
 # not being built:  
@@ -222,9 +222,12 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    cairo \
-     		gtk-layer-shell
+	    cairo
         ) 
+
+        echo "*********************"
+        echo "***install wlr-protocols-git from the aur ***"
+        echo "*********************"
 
         echo "System initialized. Now run with update-all parameter."          
 
@@ -567,6 +570,7 @@ case $1 in
             echo xfce4-settings
             echo "================================================================"
             #sudo pacman -S libxklavier xf86-input-libinput
+            #yay wlr-protocols-git
             # 04MAR15 - removed upower dependency and changed to --disable-upower-glib 
             # 04MAY15 - added libinput dependency and built with --enable-xorg-libinput
             cd $SOURCE_DIR/xfce4-settings
@@ -579,9 +583,8 @@ case $1 in
                             --disable-debug \
                             --enable-sound-settings \
                             --disable-upower-glib \
-                            --enable-pluggable-dialogs \
                             --enable-libxklavier \
-                            --enable-xorg-libinput
+                            --enable-xorg-libinput 
             make
             sudo make install
         )
@@ -1358,7 +1361,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-whiskermenu-plugin
             echo "================================================================"
-            #sudo pacman -S cmake gtk-layer-shell menulibre(AUR)
+            #sudo pacman -S cmake menulibre(AUR)
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
             cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib
