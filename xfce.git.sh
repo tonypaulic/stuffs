@@ -219,7 +219,7 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    accountsservice gtk-layer-shell
+            accountsservice gtk-layer-shell
         ) 
 
         # vala 0.16.1 - don't remember why we need this version
