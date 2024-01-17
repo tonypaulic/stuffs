@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: December 3 2019
+# Last updated: January 17 2024
 # https://bit.ly/2KhohzT
 # https://bit.ly/2YSl6XP
 
@@ -220,7 +220,8 @@ case $1 in
             vala vte3 \
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
-            libgtop
+            libgtop \
+	    accountsservice gtk-layer-shell
         ) 
 
         # vala 0.16.1 - don't remember why we need this version
@@ -1345,11 +1346,13 @@ case $1 in
             echo "================================================================"
             echo xfce4-whiskermenu-plugin
             echo "================================================================"
-            #sudo pacman -S cmake menulibre(AUR)
+            #sudo pacman -S cmake menulibre(AUR) accountsservice gtk-layer-shell
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
-            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib
-            sudo make install
+            rm CMakeCache.txt
+            cmake -B build-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
+            cmake --build build
+            sudo cmake --install build
         )
 
         echo $xXFCE_PLUGINS | grep xfce4-pulseaudio-plugin && 
