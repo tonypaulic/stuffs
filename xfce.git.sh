@@ -7,8 +7,6 @@
 ###################################################################################
 #
 # Last updated: January 17 2024
-# https://bit.ly/2KhohzT
-# https://bit.ly/2YSl6XP
 
 export PYTHONPATH="/usr/share/glib-2.0"
 
