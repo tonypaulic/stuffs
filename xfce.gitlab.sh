@@ -222,7 +222,8 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    cairo
+	    cairo \
+     	    accountsservice gtk-layer-shell
         ) 
 
         echo "*********************"
@@ -1361,12 +1362,13 @@ case $1 in
             echo "================================================================"
             echo xfce4-whiskermenu-plugin
             echo "================================================================"
-            #sudo pacman -S cmake menulibre(AUR)
+            #sudo pacman -S cmake menulibre(AUR) accountsservice gtk-layer-shell
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
-            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib
-            make
-            sudo make install
+            rm CMakeCache.txt
+            cmake -B build-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
+            cmake --build build
+            sudo cmake --install build
         )
 
         echo $xXFCE_PLUGINS | grep xfce4-pulseaudio-plugin && 
