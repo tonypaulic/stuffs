@@ -6,7 +6,7 @@
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: Nov 15, 2023
+# Last updated: Jan 26, 2024
 
 export PYTHONPATH="/usr/share/glib-2.0"
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
