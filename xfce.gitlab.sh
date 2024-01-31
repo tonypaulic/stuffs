@@ -543,7 +543,7 @@ case $1 in
             echo "================================================================"
             echo thunar
             echo "================================================================"
-            #sudo pacman -S libexif libpng gvfs gobject-introspection
+            #sudo pacman -S libexif libpng gvfs gobject-introspection libtag
             cd $SOURCE_DIR/thunar
             make clean
             ./autogen.sh    --prefix=/usr \
