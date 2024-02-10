@@ -1560,7 +1560,7 @@ case $1 in
             echo "================================================================"
             cd $SOURCE_DIR/thunar-shares-plugin
             make clean
-            ./autogen.sh --prefix=$(pkg-config --variable prefix thunarx-2)
+            ./autogen.sh --prefix=/usr
             make
             sudo make install
             # info on setting up samba: http://goodies.xfce.org/projects/thunar-plugins/thunar-shares-plugin
