@@ -206,14 +206,14 @@ case $1 in
             dbus-glib desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
-            	gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs gst-plugins-{bad,ugly} \
+            gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs gst-plugins-{bad,ugly} \
             hddtemp hicolor-icon-theme \
             intltool \
             libburn libdbusmenu-gtk3 libepoxy libexif libgsf libical libindicator-gtk3 \
-            	libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
-            	libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
+            libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
+            libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
-            	python-dbus python-distutils-extra python-gobject python-pexpect \
+            python-dbus python-distutils-extra python-gobject python-pexpect \
             qrencode gtksourceview3 \
             startup-notification \
             taglib \
@@ -222,7 +222,7 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    cairo \
+	    cairo \ dbus-glib \
      	    accountsservice gtk-layer-shell
         ) 
 
@@ -1917,7 +1917,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-screensaver
             echo "================================================================"
-       		#pacman -S xmlto docbook-xsl libxss
+       		#pacman -S xmlto docbook-xsl libxss dbus-glib
             cd $SOURCE_DIR/xfce4-screensaver
 
 			./autogen.sh \
@@ -1926,7 +1926,6 @@ case $1 in
 					--libexecdir="/usr/lib/xfce4-screensaver" \
 					--enable-docbook-docs \
 					--disable-dependency-tracking
-            sed -i -e '/\$CC/s/-shared/\0 -Wl,--as-needed/' libtool
             make 
             sudo make install
          )
