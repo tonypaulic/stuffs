@@ -157,6 +157,17 @@ xXFCE_ART=""
 ##################################################################################
 
 case $1 in
+    log)
+        [[ $2 -gt 0 ]] && NUM=$2 || NUM=10
+        for d in *; do 
+            cd $d
+            echo "========== $d =========="
+            git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep -v I18n | head -$NUM 
+            echo ""
+            cd ..
+        done > ~/Development/Xfce.commit.log
+        exit 0    
+        ;;
     init)
         ###INITIAL INSTALL ONLY
         ######clone the packages
