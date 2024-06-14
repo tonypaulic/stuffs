@@ -234,7 +234,8 @@ case $1 in
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
 	    cairo \ dbus-glib \
-     	    accountsservice gtk-layer-shell
+     	    accountsservice gtk-layer-shell \
+	    glib2-devel
         ) 
 
         echo "*********************"
