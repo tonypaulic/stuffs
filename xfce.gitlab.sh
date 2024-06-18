@@ -783,7 +783,6 @@ case $1 in
                             --libexecdir=/usr/lib \
                             --localstatedir=/var \
                             --disable-static \
-                            --enable-network-manager \
                             --enable-polkit \
                             --disable-debug
             #   --enable-debug=full
