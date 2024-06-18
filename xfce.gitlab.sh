@@ -217,7 +217,7 @@ case $1 in
             desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib2-devel glib-perl gnu-netcat gobject-introspection \
-            gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell \
+            gspell gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell \
 			gtk2 gtk3 gtksourceview3 gtksourceview4 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
@@ -1603,7 +1603,7 @@ case $1 in
             echo "================================================================"
             echo mousepad
             echo "================================================================"
-            #sudo pacman -S gtksourceview3
+            #sudo pacman -S gtksourceview4 gspell
             cd $SOURCE_DIR/mousepad
             make clean
             ./autogen.sh    --prefix=/usr \
