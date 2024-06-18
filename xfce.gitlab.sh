@@ -211,16 +211,16 @@ case $1 in
         # Arch Linux (pacman)
         which pacman > /dev/null 2>&1 &&
         (sudo pacman -S \
-            autoconf-archive \
+            accountsservice autoconf-archive \
             bzr \
-            clutter cmake \
+            cairo clutter cmake \
             desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
-            gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
-            gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs gst-plugins-{bad,ugly} \
+            gdk-pixbuf2 glade glib2-devel glib-perl gnu-netcat gobject-introspection \
+            gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell gtk2 gtk3 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
-            libburn libdbusmenu-gtk3 libepoxy libexif libgsf libical libindicator-gtk3 \
+            libburn libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
             libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
@@ -231,11 +231,7 @@ case $1 in
             udisks2 upower \
             vala vte3 \
             wget \
-            xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
-            libgtop \
-	    cairo \
-     	    accountsservice gtk-layer-shell \
-	    glib2-devel
+            xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth 
         ) 
 
         echo "*********************"
