@@ -238,6 +238,7 @@ case $1 in
 
         echo "*********************"
         echo "***install wlr-protocols-git from the aur ***"
+	echo "***manually install deprecated dbus-glib package ***"
         echo "*********************"
 
         echo "System initialized. Now run with update-all parameter."          
