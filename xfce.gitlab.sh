@@ -222,7 +222,7 @@ case $1 in
             hddtemp hicolor-icon-theme \
             intltool \
             libburn libcanberra libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
-            libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
+            libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libsoup libwnck3 \
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
 	    ninja \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
