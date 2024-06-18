@@ -76,7 +76,6 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
                 xfce4-cpugraph-plugin.git
                 xfce4-diskperf-plugin.git
                 xfce4-smartbookmark-plugin.git
-                xfce4-indicator-plugin.git
                 xfce4-whiskermenu-plugin.git
                 xfce4-pulseaudio-plugin.git
                 xfce4-calculator-plugin.git
@@ -101,6 +100,7 @@ XFCE_PLUGINS="  xfce4-weather-plugin.git
 #   xfce4-generic-slider - archived
 #   xfce4-hardware-monitor-plugin - archived
 #   xfce4-embed-plugin - not GTK3
+#   xfce4-indicator-plugin.git - no longer required
 # incomplete build:
 #   xfce4-taskbar-plugin - Apr 2 17, builds but crashes on start
 
