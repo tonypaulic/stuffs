@@ -214,7 +214,7 @@ case $1 in
             autoconf-archive \
             bzr \
             clutter cmake \
-            dbus-glib desktop-file-utils docbook-xsl \
+            desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib-perl gnu-netcat gobject-introspection \
             gst-libav gstreamer gtk-doc gtk2 gtk3 gvfs gst-plugins-{bad,ugly} \
@@ -233,7 +233,7 @@ case $1 in
             wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth \
             libgtop \
-	    cairo \ dbus-glib \
+	    cairo \
      	    accountsservice gtk-layer-shell \
 	    glib2-devel
         ) 
