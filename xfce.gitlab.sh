@@ -232,7 +232,7 @@ case $1 in
             taglib \
             udisks2 upower \
             vala vte3 \
-            wget \
+            wayland-protocols wget \
             xdg-utils xdg-user-dirs xdg-user-dirs-gtk xf86-input-libinput xmlto xorg-iceauth 
         ) 
 
@@ -775,7 +775,7 @@ case $1 in
             echo "================================================================"
             echo xfce4-power-manager
             echo "================================================================"
-            #sudo pacman -S udisks2 upower
+            #sudo pacman -S udisks2 upower wayland-protocols
             cd $SOURCE_DIR/xfce4-power-manager
             make clean
             ./autogen.sh    --prefix=/usr \
@@ -784,6 +784,7 @@ case $1 in
                             --localstatedir=/var \
                             --disable-static \
                             --enable-polkit \
+			    --enable-wayland \
                             --disable-debug
             #   --enable-debug=full
             make
