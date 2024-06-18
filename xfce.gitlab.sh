@@ -521,6 +521,26 @@ case $1 in
             sudo make install
         )
 
+        echo $xXFCE_CORE | grep libxfce4windowing && 
+        (
+            echo
+            echo
+            echo "================================================================"
+            echo libxfce4windowing
+            echo "================================================================"
+            cd $SOURCE_DIR/libxfce4windowing
+            make clean
+            ./autogen.sh    --prefix=/usr \
+                            --sysconfdir=/etc \
+                            --libexecdir=/usr/lib \
+                            --localstatedir=/var \
+                            --disable-static \
+                            --enable-gtk-doc \
+                            --disable-debug
+            make
+            sudo make install
+        )
+	
         echo $xXFCE_CORE | grep xfce4-panel && 
         (
             echo
@@ -768,27 +788,6 @@ case $1 in
             make
             sudo make install
         )
-
-        echo $xXFCE_CORE | grep libxfce4windowing && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo libxfce4windowing
-            echo "================================================================"
-            cd $SOURCE_DIR/libxfce4windowing
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --localstatedir=/var \
-                            --disable-static \
-                            --enable-gtk-doc \
-                            --disable-debug
-            make
-            sudo make install
-        )
-
 
         ###################################################################################
         ###################################################################################
