@@ -221,7 +221,7 @@ case $1 in
 			gtk2 gtk3 gtksourceview3 gtksourceview4 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
-            libburn libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
+            libburn libcanberra libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
             libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
 	    ninja \
