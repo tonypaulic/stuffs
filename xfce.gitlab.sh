@@ -664,6 +664,7 @@ case $1 in
 							--enable-randr \
 							--enable-xpresent \
 							--enable-compositor \
+       							--enable-xi2 \
 							--disable-debug
             make
             sudo make install
