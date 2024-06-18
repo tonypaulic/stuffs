@@ -218,7 +218,7 @@ case $1 in
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib2-devel glib-perl gnu-netcat gobject-introspection \
             gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell \
-	    gtk2 gtk3 gtksourceview3 gtksourceview4 gvfs \
+		gtk2 gtk3 gtksourceview3 gtksourceview4 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
             libburn libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
