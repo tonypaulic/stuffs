@@ -822,7 +822,7 @@ case $1 in
         # XFCE_BINDINGS
         ###################################################################################
         ###################################################################################
-
+	
         echo $xXFCE_BINDINGS | grep xfce4-vala && 
         (
             echo
@@ -830,9 +830,14 @@ case $1 in
             echo "================================================================"
             echo xfce4-vala
             echo "================================================================"
-            cd $SOURCE_DIR
-            ./autogen.sh --prefix=/usr --with-vala-api=$(pacman -Qi vala | grep Version | awk '{print $3}' | sed 's/\.[^.]*$//')
-            make
+            cd $SOURCE_DIR/xfce4-vala
+	    ./autogen.sh --prefix=/usr \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib \
+		--localstatedir=/var \
+		--enable-maintainer-mode \
+		--with-vala-api=0.56
+            #make
             sudo make install        
         )
 
