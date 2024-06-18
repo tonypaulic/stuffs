@@ -217,7 +217,8 @@ case $1 in
             desktop-file-utils docbook-xsl \
             ffmpegthumbnailer freetype2 \
             gdk-pixbuf2 glade glib2-devel glib-perl gnu-netcat gobject-introspection \
-            gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell gtk2 gtk3 gvfs \
+            gst-libav gst-plugins-{bad,ugly} gstreamer gtk-doc gtk-layer-shell \
+	    gtk2 gtk3 gtksourceview3 gtksourceview4 gvfs \
             hddtemp hicolor-icon-theme \
             intltool \
             libburn libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
@@ -225,7 +226,7 @@ case $1 in
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             python-dbus python-distutils-extra python-gobject python-pexpect \
-            qrencode gtksourceview3 \
+            qrencode \
             startup-notification \
             taglib \
             udisks2 upower \
