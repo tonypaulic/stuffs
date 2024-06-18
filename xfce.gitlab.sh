@@ -224,6 +224,7 @@ case $1 in
             libburn libdbusmenu-gtk3 libepoxy libexif libgsf libgtop libical libindicator-gtk3 \
             libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libwnck3 \
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
+	    ninja \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             python-dbus python-distutils-extra python-gobject python-pexpect \
             qrencode \
@@ -1374,7 +1375,7 @@ case $1 in
             cd $SOURCE_DIR/xfce4-whiskermenu-plugin
             make clean
             rm CMakeCache.txt
-            cmake -B build-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
+            cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
             cmake --build build
             sudo cmake --install build
         )
