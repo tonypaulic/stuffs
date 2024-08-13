@@ -224,7 +224,7 @@ case $1 in
             libburn libcanberra libdbusmenu-gtk3 libepoxy libexif libgepub libgsf libgtop libical libindicator-gtk3 \
             libisofs libkeybinder3 libmpd libnotify libopenraw libpng libsm libsoup libwnck3 \
             libxklavier libxml2 libxnvctrl libxss lm_sensors libxpresent \
-	    ninja \
+	    meson ninja \
             perl-extutils-depends perl-extutils-pkgconfig perl-uri polkit-gnome poppler-glib \
             python-dbus python-distutils-extra python-gobject python-pexpect \
             qrencode \
@@ -1902,10 +1902,9 @@ case $1 in
             # pacman -S python-distutils-extra python-dbus python-pexpect
             cd $SOURCE_DIR/catfish
             #rm -f po/catfish.pot
-            python setup.py build
-            sudo python setup.py install --optimize=1
-            sudo install -d "/usr/share/pixmaps"
-            sudo ln -sf "/usr/share/icons/hicolor/scalable/apps/catfish.svg" "/usr/share/pixmaps/catfish.svg"
+            meson setup build
+    	    meson compile -C build
+    	    sudo meson install -C build
         )    
         cd $SOURCE_DIR
         
