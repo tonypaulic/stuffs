@@ -6,14 +6,14 @@ sudo apt update && sudo apt upgrade
 sudo apt install bzip2
 
 wget https://archive.xfce.org/xfce/4.20pre1/fat_tarballs/xfce-4.20pre1.tar.bz2
-tar -xv xfce-4.20pre1.tar.bz2
+tar -xf xfce-4.20pre1.tar.bz2
 
 SOURCE="$(pwd)/src"
 
 cd $SOURCE
 for f in *.bz
 do
-    tar -xv $f
+    tar -xf $f
 done
 
 sudo apt install \
