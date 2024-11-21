@@ -342,7 +342,7 @@ done
     make && sudo make install       
     
 #xfce4-terminal
-    cd $SOURCE/apps/xfce4-screenshooter-1.1.3
+    cd $SOURCE/apps/xfce4-terminal-1.1.3
     ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
     make && sudo make install      
     
