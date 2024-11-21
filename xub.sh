@@ -10,6 +10,12 @@ tar -xv xfce-4.20pre1.tar.bz2
 
 SOURCE="$(pwd)/src"
 
+cd $SOURCE
+for f in *.bz
+do
+    tar -xv $f
+done
+
 sudo apt install \
     build-essential libgtk-3-dev xserver-xorg gtk-doc-tools xsltproc meson \
     libstartup-notification0-dev libgtk-layer-shell-dev intltool libgudev-1.0-dev \
