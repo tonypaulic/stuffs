@@ -207,7 +207,6 @@ done
     git clone https://gitlab.xfce.org/panel-plugins/xfce4-pulseaudio-plugin.git
     cd xfce4-pulseaudio-plugin
     ./autogen.sh --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
-    make && sudo make install
     
 #sensors
     cd $SOURCE/panel-plugins/xfce4-sensors-plugin-1.4.4
@@ -231,6 +230,131 @@ done
     cmake --build build
     sudo cmake --install build   
 
+#####THUNAR-PLUGINS    
+sudo apt install \
+    libtagc0-dev    
+
+mkdir $SOURCE/thunar-plugins
+cd $SOURCE/thunar-plugins
+
+wget "https://archive.xfce.org/src/thunar-plugins/thunar-archive-plugin/0.5/thunar-archive-plugin-0.5.2.tar.bz2"
+wget "https://archive.xfce.org/src/thunar-plugins/thunar-media-tags-plugin/0.4/thunar-media-tags-plugin-0.4.0.tar.bz2"
+wget "https://archive.xfce.org/src/thunar-plugins/thunar-shares-plugin/0.3/thunar-shares-plugin-0.3.2.tar.bz2"
+
+
+for f in *.bz2
+do
+    tar -xf $f
+done
+
+#thunar-archive
+    cd $SOURCE/thunar-plugins/thunar-archive-plugin-0.5.2
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install 
+    
+#thunar-media-tags
+    cd $SOURCE/thunar-plugins/thunar-media-tags-plugin-0.4.0
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install     
+
+#thunar-shares
+    cd $SOURCE/thunar-plugins/thunar-shares-plugin-0.3.2
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install            
+      
+      
+#####APPS    
+sudo apt install \    
+    python3-distutils-extra libgtksourceview-4-dev libgspell-1-dev libdbus-glib-1-dev \
+    libclutter-1.0-dev libclutter-gtk-1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev \
+    libexif-dev libcanberra-gtk3-dev libxss-dev libxrandr-dev libpam0g-dev libsystemd-dev \
+    libxmu-dev libvte-2.91-dev libmpd-dev
+
+mkdir $SOURCE/apps
+cd $SOURCE/apps
+
+wget "https://archive.xfce.org/src/apps/catfish/4.18/catfish-4.18.0.tar.bz2"
+wget "https://archive.xfce.org/src/apps/gigolo/0.5/gigolo-0.5.3.tar.bz2"
+wget "https://archive.xfce.org/src/apps/mousepad/0.6/mousepad-0.6.3.tar.bz2"
+wget "https://archive.xfce.org/src/apps/parole/4.18/parole-4.18.1.tar.bz2"
+wget "https://archive.xfce.org/src/apps/ristretto/0.13/ristretto-0.13.2.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-notifyd/0.9/xfce4-notifyd-0.9.6.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-panel-profiles/1.0/xfce4-panel-profiles-1.0.14.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-screensaver/4.18/xfce4-screensaver-4.18.3.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-screenshooter/1.11/xfce4-screenshooter-1.11.1.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-taskmanager/1.5/xfce4-taskmanager-1.5.7.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-terminal/1.1/xfce4-terminal-1.1.3.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfce4-volumed-pulse/0.2/xfce4-volumed-pulse-0.2.4.tar.bz2"
+wget "https://archive.xfce.org/src/apps/xfmpc/0.3/xfmpc-0.3.1.tar.bz2"
+
+for f in *.bz2
+do
+    tar -xf $f
+done
+
+#catfish
+    cd $SOURCE/apps/catfish-4.18.0
+    sudo python3 setup.py install
+    
+#gigolo
+    cd $SOURCE/apps/gigolo-0.5.3
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install   
+ 
+#mousepad
+    cd $SOURCE/apps/mousepad-0.6.3
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install  
+    
+#parole
+    cd $SOURCE/apps/parole-4.18.1
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install    
+    
+#ristretto
+    cd $SOURCE/apps/ristretto-0.13.2
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install  
+    
+#xfce4-notifyd
+    cd $SOURCE/apps/xfce4-notifyd-0.9.6
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install    
+    
+#panel-profiles
+    cd $SOURCE/apps/xfce4-panel-profiles-1.0.14
+    ./configure --prefix=/usr
+    make && sudo make install    
+    
+#xfce4-screensaver
+    cd $SOURCE/apps/xfce4-screensaver-4.18.3
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install    
+    
+#xfce4-screenshooter
+    cd $SOURCE/apps/xfce4-screenshooter-1.11.1
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install       
+    
+#xfce4-taskmanager
+    cd $SOURCE/apps/xfce4-taskmanager-1.5.7
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install       
+    
+#xfce4-terminal
+    cd $SOURCE/apps/xfce4-screenshooter-1.1.3
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install      
+    
+#xfce4-volumed-pulse
+    cd $SOURCE/apps/xfce4-volumed-pulse-0.2.4
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install 
+    
+#xfmpc
+    cd $SOURCE/apps/xfmpc-0.3.1
+    ./configure --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install                            
       
 ##### START XFCE
 startxfce4 > ~/.xsession-error 2>&1
