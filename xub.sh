@@ -264,7 +264,7 @@ done
       
       
 #####APPS    
-sudo apt install \    
+sudo apt install \
     python3-distutils-extra libgtksourceview-4-dev libgspell-1-dev libdbus-glib-1-dev \
     libclutter-1.0-dev libclutter-gtk-1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev \
     libexif-dev libcanberra-gtk3-dev libxss-dev libxrandr-dev libpam0g-dev libsystemd-dev \
