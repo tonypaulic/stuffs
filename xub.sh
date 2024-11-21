@@ -207,6 +207,7 @@ done
     git clone https://gitlab.xfce.org/panel-plugins/xfce4-pulseaudio-plugin.git
     cd xfce4-pulseaudio-plugin
     ./autogen.sh --prefix=/usr --libexecdir=/usr/lib/$(uname -m)-linux-gnu --sysconfdir=/etc
+    make && sudo make install
     
 #sensors
     cd $SOURCE/panel-plugins/xfce4-sensors-plugin-1.4.4
