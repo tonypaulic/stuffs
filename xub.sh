@@ -11,7 +11,7 @@ tar -xf xfce-4.20pre1.tar.bz2
 SOURCE="$(pwd)/src"
 
 cd $SOURCE
-for f in *.bz
+for f in *.bz2
 do
     tar -xf $f
 done
