@@ -13,7 +13,7 @@ SOURCE="$(pwd)/src"
 cd $SOURCE
 for f in *.bz
 do
-    tar -xv $f
+    tar -xf $f
 done
 
 sudo apt install \
