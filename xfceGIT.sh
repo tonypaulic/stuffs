@@ -126,7 +126,7 @@ case $1 in
         # Build dependencies
         sudo pacman -S \
             base-devel xorg xorg-xinit pipewire \
-            libsxlt meson docbook-xsl \
+            libxslt meson docbook-xsl \
             gtk-doc \
             glib2-devel vala \
             gtk3 startup-notification libgtop libgudev \
