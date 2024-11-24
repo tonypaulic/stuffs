@@ -392,7 +392,8 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
+                            --libexecdir=/usr/lib \
+			    --enable-gtk-doc
             make
             sudo make install
         )
