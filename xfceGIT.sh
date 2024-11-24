@@ -755,8 +755,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib
             make
             sudo make install
         )
@@ -791,8 +790,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -809,8 +807,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )  
@@ -842,8 +839,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )              
@@ -900,8 +896,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
             # info on setting up samba: http://goodies.xfce.org/projects/thunar-plugins/thunar-shares-plugin
@@ -956,8 +951,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -974,8 +968,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -1042,8 +1035,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -1074,8 +1066,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -1108,8 +1099,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -1126,8 +1116,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )
@@ -1143,8 +1132,8 @@ case $1 in
             cd $SOURCE_DIR/xfce4-volumed-pulse
             make clean
             ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --disable-debug
+                            --sysconfdir=/etc 
+			    --libexecdir=/usr/lib
             make
             sudo make install
         )
@@ -1178,8 +1167,7 @@ case $1 in
             make clean
             ./autogen.sh    --prefix=/usr \
                             --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --disable-debug
+                            --libexecdir=/usr/lib 
             make
             sudo make install
         )         
