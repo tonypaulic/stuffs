@@ -1213,3 +1213,16 @@ case $1 in
 esac
 
 exit 0
+
+################################### Wayand/wayfire instructions
+cd ~/Development
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz
+tar xzvf yay.tar.gz
+cd yay
+makepkg -si
+yay -S wayfire
+cd ~/.config
+wget https://raw.githubusercontent.com/tonypaulic/stuffs/refs/heads/master/wayfire.ini
+cd
+startxfce4 --wayland wayfire
+################################### 
