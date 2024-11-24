@@ -127,7 +127,7 @@ case $1 in
         sudo pacman -S \
             base-devel xorg xorg-xinit pipewire \
             libxslt meson docbook-xsl \
-            gtk-doc \
+            gtk-doc gobject-introspection \
             glib2-devel vala \
             gtk3 startup-notification libgtop libgudev \
             libwnck3 libdisplay-info wayland wlr-protocols \
@@ -284,7 +284,7 @@ case $1 in
             echo "================================================================"
             echo libxfce4util
             echo "================================================================"
-            ### gtk-doc
+            ### gtk-doc gobject-introspection
             cd $SOURCE_DIR/libxfce4util
             make clean
             ./autogen.sh    --prefix=/usr \
