@@ -1,14 +1,15 @@
 #!/bin/bash
 # for Arch: XFCE GIT BUILD/UPDATE SCRIPT
-# Requires: git wget
+# Requires: git wget meson
 # Optional: screen
 ###################################################################################
 # use "screen -L" to create a log file of the install/update
 ###################################################################################
 #
-# Last updated: November 24, 2024
+# Last updated: July 16, 2025 (migration to meson)
 
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
+PREFIX="/usr"		# default is /usr/local
 
 ###################################################################################
 # directory to hold source files 
@@ -18,7 +19,24 @@ cd $SOURCE_DIR
 ###################################################################################
 
 ####################################################################################
-# list of Xfce core components
+# support functions
+build () {
+    # function to build package via meson
+    # $1 = package
+    # $2 = extra options
+    echo
+    echo
+    echo "================================================================"
+    echo $1
+    echo "================================================================"
+	cd $SOURCE_DIR/$1	
+	meson setup --reconfigure build --prefix=$PREFIX $2
+	meson compile -C build
+	sudo meson install -C build
+}
+
+####################################################################################
+# list of Xfce core components to build
 XFCE_CORE="     xfce4-dev-tools.git
                 libxfce4util.git
                 xfconf.git
@@ -97,7 +115,7 @@ case $1 in
             git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep -v I18n | head -$NUM 
             echo ""
             cd ..
-        done > ~/Development/Xfce.commit.log
+        done |& less -F
         exit 0    
         ;;
     init)
@@ -129,7 +147,7 @@ case $1 in
             libxslt meson docbook-xsl \
             gtk-doc gobject-introspection \
             glib2-devel vala \
-            gtk3 startup-notification libgtop libgudev \
+            gtk3 startup-notification libgtop libgudev glade \
             libwnck3 libdisplay-info wayland wlr-protocols \
             gtk-layer-shell libdbusmenu-gtk3 \
             libnotify \
@@ -145,12 +163,15 @@ case $1 in
             libkeybinder3 pavucontrol \
             cmake accountsservice \
             taglib \
+	    zeitgeist \
             python-gobject python-dbus python-pexpect \
             gspell \
             dbus-glib \
             libexif \
             libburn libisofs \
-            libxrandr libxss \
+	    python-psutil \
+	    help2man \
+            libxrandr libxss xmlto \
             vte3 \
             libxmu \
             clutter 
@@ -244,8 +265,8 @@ case $1 in
 
         ###################################################################################
         # recommended exports
-        export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
-        export CFLAGS="-O2 -pipe"
+        #export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+        #export CFLAGS="-O2 -pipe"
         ###################################################################################
 
 
@@ -276,78 +297,19 @@ case $1 in
             make
             sudo make install
         )
-
-        echo $xXFCE_CORE | grep libxfce4util && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo libxfce4util
-            echo "================================================================"
-            ### gtk-doc gobject-introspection
-            cd $SOURCE_DIR/libxfce4util
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --enable-introspection
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfconf && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfconf
-            echo "================================================================"
-            ### glib2-devel vala
-            cd $SOURCE_DIR/xfconf
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep libxfce4ui && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo libxfce4ui
-            echo "================================================================"
-            ### gtk3 startup-notification libgtop libgudev
-            cd $SOURCE_DIR/libxfce4ui
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep garcon && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo garcon
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/garcon
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep exo && 
-        (
+		
+		### libxfce4util = gtk-doc gobject-introspection
+        echo $xXFCE_CORE | grep libxfce4util && build libxfce4util
+		### xfconf = glib2-devel vala
+        echo $xXFCE_CORE | grep xfconf && build xfconf
+        	### libxfce4ui = gtk3 startup-notification libgtop libgudev glade
+        echo $xXFCE_CORE | grep libxfce4ui && build libxfce4ui
+		### garcon = 
+        echo $xXFCE_CORE | grep garcon && build garcon
+	
+		###
+        echo $xXFCE_CORE | grep exo &&
+       (
             echo
             echo
             echo "================================================================"
@@ -357,202 +319,32 @@ case $1 in
             cd $SOURCE_DIR/exo
             make clean
             ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
             make
             sudo make install
         )
 
-        echo $xXFCE_CORE | grep libxfce4windowing && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo libxfce4windowing
-            echo "================================================================"
-            ### libwnck3 libdisplay-info wayland wlr-protocols
-            cd $SOURCE_DIR/libxfce4windowing
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-	
-        echo $xXFCE_CORE | grep xfce4-panel && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-panel
-            echo "================================================================"
-            ### gtk-layer-shell libdbusmenu-gtk3
-            cd $SOURCE_DIR/xfce4-panel
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-			    --enable-gtk-doc
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep -e "thunar.git " -e "thunar.git$" && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo thunar
-            echo "================================================================"
-            ### libnotify
-            cd $SOURCE_DIR/thunar
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfce4-settings && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-settings
-            echo "================================================================"
-            ### libxklavier libcanberra xf86-input-libinput
-            #** not enabling upower support
-            cd $SOURCE_DIR/xfce4-settings
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --enable-sound-settings
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfce4-session && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-session
-            echo "================================================================"
-            ### polkit xorg-iceauth
-            cd $SOURCE_DIR/xfce4-session
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfwm4 && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfwm4
-            echo "================================================================"
-            ### libxpresent
-            cd $SOURCE_DIR/xfwm4
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib \
-                            --enable-xi2
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfdesktop && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfdesktop
-            echo "================================================================"
-            ### libyaml
-            cd $SOURCE_DIR/xfdesktop
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfce4-appfinder && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-appfinder
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-appfinder
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep tumbler && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo tumbler
-            echo "================================================================"
-            ### gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib libgepub
-            cd $SOURCE_DIR/tumbler
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep thunar-volman && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo thunar-volman
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/thunar-volman
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_CORE | grep xfce4-power-manager && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-power-manager
-            echo "================================================================"
-            ### upower
-            cd $SOURCE_DIR/xfce4-power-manager
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
+		### libxfce4windowing = libwnck3 libdisplay-info wayland wlr-protocols
+        echo $xXFCE_CORE | grep libxfce4windowing && build libxfce4windowing
+		### xfce4-panel = gtk-layer-shell libdbusmenu-gtk3
+	echo $xXFCE_CORE | grep xfce4-panel && build xfce4-panel
+		### thunar = libnotify
+        echo $xXFCE_CORE | grep -e "thunar.git " -e "thunar.git$" && build thunar
+		### xfce4-settings = libxklavier libcanberra xf86-input-libinput
+        echo $xXFCE_CORE | grep xfce4-settings && build xfce4-settings
+		### xfce4-session = polkit xorg-iceauth
+        echo $xXFCE_CORE | grep xfce4-session && build xfce4-session
+		### xfwm4 = libxpresent
+        echo $xXFCE_CORE | grep xfwm4 && build xfwm4
+		### xfdesktop = libyaml
+        echo $xXFCE_CORE | grep xfdesktop && build xfdesktop
+		###
+        echo $xXFCE_CORE | grep xfce4-appfinder && build xfce4-appfinder
+		### tumbler = gdk-pixbuf2 ffmpegthumbnailer freetype2 libgsf libopenraw poppler-glib libgepub
+        echo $xXFCE_CORE | grep tumbler && build tumbler
+		###
+        echo $xXFCE_CORE | grep thunar-volman && build thunar-volman
+		### xfce4-power-manager = upower
+        echo $xXFCE_CORE | grep xfce4-power-manager && build xfce4-power-manager
 
         ###################################################################################
         ###################################################################################
@@ -560,290 +352,40 @@ case $1 in
         ###################################################################################
         ###################################################################################
 
-        echo $xXFCE_PLUGINS | grep xfce4-clipman-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-clipman-plugin
-            echo "================================================================"
-            ### qrencode
-            cd $SOURCE_DIR/xfce4-clipman-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-        
-        echo $xXFCE_PLUGINS | grep xfce4-cpufreq-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-cpufreq-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-cpufreq-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-docklike-plugin && 
-        (
-            echo
-            echo "================================================================"
-            echo xfce4-docklike-plugin
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/xfce4-docklike-plugin
-            make clean   
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib   
-            make
-            sudo make install
-        )
- 
-        echo $xXFCE_PLUGINS | grep xfce4-eyes-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-eyes-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-eyes-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-                
-        echo $xXFCE_PLUGINS | grep xfce4-genmon-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-genmon-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-genmon-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-mailwatch-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-mailwatch-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-mailwatch-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-mpc-plugin && 
-        (
-            echo
-            echo "================================================================"
-            echo xfce4-mpc-plugin
-            echo "================================================================"
-            ### libmpd
-            cd $SOURCE_DIR/xfce4-mpc-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-        
-        echo $xXFCE_PLUGINS | grep xfce4-netload-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-netload-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-netload-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-        
-        echo $xXFCE_PLUGINS | grep xfce4-notes-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-notes-plugin
-            echo "================================================================"
-            ### gtksourceview4
-            cd $SOURCE_DIR/xfce4-notes-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-places-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-places-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-places-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-        
-        echo $xXFCE_PLUGINS | grep xfce4-pulseaudio-plugin && 
-        (
-            echo
-            echo "================================================================"
-            echo xfce4-pulseaudio-plugin
-            echo "================================================================"
-            ### libkeybinder3 pavucontrol
-            # 03MAR15 - added --with-mixer-command parameter
-            cd $SOURCE_DIR/xfce4-pulseaudio-plugin
-            make clean   
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-                        
-        echo $xXFCE_PLUGINS | grep xfce4-sensors-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-sensors-plugin
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/xfce4-sensors-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-systemload-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-systemload-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-systemload-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-
-        echo $xXFCE_PLUGINS | grep xfce4-timer-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-timer-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-timer-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_PLUGINS | grep xfce4-weather-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-weather-plugin
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/xfce4-weather-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )  
-
-        echo $xXFCE_PLUGINS | grep xfce4-whiskermenu-plugin &&
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-whiskermenu-plugin
-            echo "================================================================"
-            ### cmake accountsservice
-            cd $SOURCE_DIR/xfce4-whiskermenu-plugin
-            make clean
-            cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_INSTALL_LIBDIR=/usr/lib -GNinja
-            cmake --build build
-            sudo cmake --install build
-        )        
-        
-        echo $xXFCE_PLUGINS | grep xfce4-xkb-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-xkb-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-xkb-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )              
+		### xfce4-clipman-plugin = qrencode
+        echo $xXFCE_PLUGINS | grep xfce4-clipman-plugin && build xfce4-clipman-plugin 
+        	###
+        echo $xXFCE_PLUGINS | grep xfce4-cpufreq-plugin && build xfce4-cpufreq-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-docklike-plugin && build xfce4-docklike-plugin
+		### 
+        echo $xXFCE_PLUGINS | grep xfce4-eyes-plugin && build xfce4-eyes-plugin 
+		###                
+        echo $xXFCE_PLUGINS | grep xfce4-genmon-plugin && build xfce4-genmon-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-mailwatch-plugin && build xfce4-mailwatch-plugin
+		### xfce4-mpc-plugin = libmpd
+        echo $xXFCE_PLUGINS | grep xfce4-mpc-plugin && build xfce4-mpc-plugin 
+		###        
+        echo $xXFCE_PLUGINS | grep xfce4-netload-plugin && build xfce4-netload-plugin
+		### xfce4-notes-plugin = gtksourceview4
+        echo $xXFCE_PLUGINS | grep xfce4-notes-plugin && build xfce4-notes-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-places-plugin && build xfce4-places-plugin
+        	### xfce4-pulseaudio-plugin = libkeybinder3 pavucontrol
+        echo $xXFCE_PLUGINS | grep xfce4-pulseaudio-plugin && build xfce4-pulseaudio-plugin
+		###                        
+        echo $xXFCE_PLUGINS | grep xfce4-sensors-plugin && build xfce4-sensors-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-systemload-plugin && build xfce4-systemload-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-timer-plugin && build xfce4-timer-plugin
+		###
+        echo $xXFCE_PLUGINS | grep xfce4-weather-plugin && build xfce4-weather-plugin
+		### xfce4-whiskermenu-plugin = cmake accountsservice
+        echo $xXFCE_PLUGINS | grep xfce4-whiskermenu-plugin && build xfce4-whiskermenu-plugin
+      		###        
+        echo $xXFCE_PLUGINS | grep xfce4-xkb-plugin && build xfce4-xkb-plugin
 
         ###################################################################################
         ###################################################################################
@@ -851,57 +393,13 @@ case $1 in
         ###################################################################################
         ###################################################################################
 
-        echo $xTHUNAR_PLUGINS | grep thunar-archive-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo thunar-archive-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/thunar-archive-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xTHUNAR_PLUGINS | grep thunar-media-tags-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo thunar-media-tags-plugin
-            echo "================================================================"
-            ### taglib
-            cd $SOURCE_DIR/thunar-media-tags-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xTHUNAR_PLUGINS | grep thunar-shares-plugin && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo thunar-shares-plugin
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/thunar-shares-plugin
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-            # info on setting up samba: http://goodies.xfce.org/projects/thunar-plugins/thunar-shares-plugin
-        )
+		###
+        echo $xTHUNAR_PLUGINS | grep thunar-archive-plugin && build thunar-archive-plugin
+		### thunar-media-tags-plugin = taglib
+        echo $xTHUNAR_PLUGINS | grep thunar-media-tags-plugin && build thunar-media-tags-plugin
+		###
+		# info on setting up samba: http://goodies.xfce.org/projects/thunar-plugins/thunar-shares-plugin
+        echo $xTHUNAR_PLUGINS | grep thunar-shares-plugin && build thunar-shares-plugin
 
         ###################################################################################
         ###################################################################################
@@ -909,237 +407,37 @@ case $1 in
         ###################################################################################
         ###################################################################################
 
-        echo $xXFCE_APPS | grep catfish &&
-        (
-            echo
-            echo
-            echo "==============================================================="
-            echo catfish
-            echo "================================================================"
-            ### python-gobject python-dbus python-pexpect
-            cd $SOURCE_DIR/catfish
-            meson setup build
-    	    meson compile -C build
-    	    sudo meson install -C build
-        )  
-
-        echo $xXFCE_APPS | grep gigolo && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo gigolo
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/gigolo
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep mousepad && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo mousepad
-            echo "================================================================"
-            ### gspell
-            cd $SOURCE_DIR/mousepad
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep parole && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo parole
-            echo "================================================================"
-            ### dbus-glib
-            cd $SOURCE_DIR/parole
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep ristretto && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo ristretto
-            echo "================================================================"
-            ### libexif
-            cd $SOURCE_DIR/ristretto
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfburn && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfburn
-            echo "================================================================"
-            ### libburn libisofs
-            cd $SOURCE_DIR/xfburn
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfce4-dict && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-dict
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/xfce4-dict
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-                echo $xXFCE_APPS | grep xfce4-notifyd && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-notifyd
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-notifyd
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfce4-panel-profiles &&
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-panel-profiles
-            echo "================================================================"
-       		#### 
-            cd $SOURCE_DIR/xfce4-panel-profiles
-            ./configure --prefix=/usr 
-            make 
-            sudo make install
-        )
-         
-        echo $xXFCE_APPS | grep xfce4-screenshooter && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-screenshooter
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfce4-screenshooter
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfce4-screensaver &&
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-screensaver
-            echo "================================================================"
-       		### libxrandr libxss
-            cd $SOURCE_DIR/xfce4-screensaver
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make 
-            sudo make install
-        )
-         
-        echo $xXFCE_APPS | grep xfce4-terminal && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-terminal
-            echo "================================================================"
-            ### vte3
-            cd $SOURCE_DIR/xfce4-terminal
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfce4-taskmanager && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-taskmanager
-            echo "================================================================"
-			### libxmu
-            cd $SOURCE_DIR/xfce4-taskmanager
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfce4-volumed-pulse && 
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfce4-volumed-pulse
-            echo "================================================================"
-            ### 
-            cd $SOURCE_DIR/xfce4-volumed-pulse
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc 
-			    --libexecdir=/usr/lib
-            make
-            sudo make install
-        )
-
-        echo $xXFCE_APPS | grep xfdashboard &&
+		### catfish = zeitgist
+        echo $xXFCE_APPS | grep catfish && build catfish
+		###
+        echo $xXFCE_APPS | grep gigolo && build gigolo
+		### mousepad = gspell
+        echo $xXFCE_APPS | grep mousepad && build mousepad
+		### parole = dbus-glib
+        echo $xXFCE_APPS | grep parole && build parole
+		###
+        echo $xXFCE_APPS | grep ristretto && build ristretto
+		### xfburn = libburn libisofs
+        echo $xXFCE_APPS | grep xfburn && build xfburn
+		###
+        echo $xXFCE_APPS | grep xfce4-dict && build xfce4-dict
+		###
+        echo $xXFCE_APPS | grep xfce4-notifyd && build xfce4-notifyd
+		### xfce4-panel-profiles = python-psutil
+        echo $xXFCE_APPS | grep xfce4-panel-profiles && build xfce4-panel-profiles
+		### xfce4-screenshooter = help2man        
+        echo $xXFCE_APPS | grep xfce4-screenshooter && build xfce4-screenshooter
+		### xfce4-screensaver = libxrandr libxss xmlto
+        echo $xXFCE_APPS | grep xfce4-screensaver && build xfce4-screensaver
+         	### xfce4-terminal = vte3
+        echo $xXFCE_APPS | grep xfce4-terminal && build xfce4-terminal
+		###
+        echo $xXFCE_APPS | grep xfce4-taskmanager && build xfce4-taskmanager
+		###
+        echo $xXFCE_APPS | grep xfce4-volumed-pulse && build xfce4-volumed-pulse
+		
+  		### xfdashboard = clutter        
+	echo $xXFCE_APPS | grep xfdashboard &&
         (
             echo
             echo
@@ -1156,22 +454,8 @@ case $1 in
             sudo make install
         )
 
-        echo $xXFCE_APPS | grep xfmpc &&
-        (
-            echo
-            echo
-            echo "================================================================"
-            echo xfmpc
-            echo "================================================================"
-            ###
-            cd $SOURCE_DIR/xfmpc
-            make clean
-            ./autogen.sh    --prefix=/usr \
-                            --sysconfdir=/etc \
-                            --libexecdir=/usr/lib 
-            make
-            sudo make install
-        )         
+			###
+        echo $xXFCE_APPS | grep xfmpc && build xfmpc
 
         cd $SOURCE_DIR        
               
@@ -1208,6 +492,7 @@ case $1 in
         echo "   init -> initialize the build environment MUST BE RUN FIRST!!!"
         echo "   update -> to update the build from the git tree for packages with changes"
         echo "   update-all -> to update all packages regardless of whether there are changes"
+	echo "   log LINES -> display non-translation git commits at LINES lines per package"
         echo
         ;;
 esac
