@@ -161,23 +161,31 @@ case $1 in
 	log)
         [[ $2 -gt 0 ]] && NUM=$2 || NUM=10
 
-		if [ -n $3 ]; then
+		if [ "$3" == "today" ]; then
+			for d in $(ls $SOURCE_DIR); do 
+			    cd $SOURCE_DIR/$d
+			    echo "========== $d =========="
+			    git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep $(date +%Y-%m-%d) | head -$NUM 
+			    echo ""
+			    cd ..
+			done |& less -F
+		fi
+
+		if [ "$3" != "" ]; then
 			cd $SOURCE_DIR/$3 || exit 1
 	        echo "========== $3 =========="
 	        git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep -v I18n | head -$NUM 
 	        echo ""
-	        cd ..
 			exit 0
 		fi
 
-        for d in *; do 
-            cd $d
-            echo "========== $d =========="
-            git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep -v I18n | head -$NUM 
-            echo ""
-            cd ..
-        done |& less -F
-        exit 0    
+	    for d in $(ls $SOURCE_DIR); do 
+	        cd $SOURCE_DIR/$d
+	        echo "========== $d =========="
+	        git log --graph --pretty=format:"%h%x09%ad  %s" --date=short | grep -v I18n | head -$NUM 
+	        echo ""
+	        cd ..
+	    done |& less -F
         ;;
 
     init)
