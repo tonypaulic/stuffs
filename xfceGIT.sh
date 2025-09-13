@@ -7,6 +7,7 @@
 ###################################################################################
 #
 # Last updated: July 16, 2025 (migration to meson)
+#				Sept 13, 2025 (sound-settings enabled)
 
 LOG="$HOME/Development/$(date +%s).xfcegit.log"
 PREFIX="/usr"			# default is /usr/local
@@ -392,7 +393,7 @@ case $1 in
 			### thunar = libnotify
         echo $xXFCE_CORE | grep -e "thunar.git " -e "thunar.git$" && build thunar
 			### xfce4-settings = libxklavier libcanberra xf86-input-libinput
-        echo $xXFCE_CORE | grep xfce4-settings && build xfce4-settings
+        echo $xXFCE_CORE | grep xfce4-settings && build xfce4-settings "-Dsound-settings=true"
 			### xfce4-session = polkit xorg-iceauth
         echo $xXFCE_CORE | grep xfce4-session && build xfce4-session
 			### xfwm4 = libxpresent
